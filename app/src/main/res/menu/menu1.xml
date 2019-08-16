@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:compatibility="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/jugarahora"
+        android:title="Jugar Ahora"
+        app:showAsAction="always"/>
+    <item android:id="@+id/juego"
+        android:title="timer"
+        compatibility:showAsAction="always"
+        compatibility:actionViewClass="android.widget.TextView" />
+    <item android:id="@+id/break_timer"
+        android:title="timer"
+        compatibility:showAsAction="always"
+        compatibility:actionViewClass="android.widget.TextView" />
+    <item android:id="@+id/resultados"
+        android:title="Resultados"
+        android:icon="@drawable/resultados"
+        app:showAsAction="always"/>
+
+</menu>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    android:background="@drawable/colorines1"
+    tools:context=".VisualizacionRecord">
+<TextView
+    android:id="@+id/nuevorecord"
+    android:layout_width="match_parent"
+    android:layout_weight="1"
+    android:layout_height="0dp"
+    android:text="NUEVO RECORD"
+    android:background="@color/aguamarina"
+    android:gravity="center"
+    android:textColor="#D11655"
+    android:textSize="25sp"
+    android:textStyle="bold"
+    />
+    <TextView
+        android:id="@+id/nivel"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:background="@color/aguamarina"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:text="NIVEL"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="3">
+    <ImageView
+        android:id="@+id/imagen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</LinearLayout>
+    <TextView
+        android:id="@+id/nombrejugador"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="pepillo"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:background="@color/aguamarina"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/tiempo"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="hh:mm:ss"
+        android:gravity="center"
+        android:background="@color/aguamarina"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_weight="1">
+    <Button
+        android:id="@+id/continuar"
+        android:text="¿JUGAR?"
+        android:onClick="continuar"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="@color/azul"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+        <Button
+            android:id="@+id/volvemenu"
+            android:tag="1"
+            android:text="RESULTADOS"
+            android:onClick="resultados"
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_weight="1.2"
+            android:layout_height="match_parent"
+            android:background="@color/amarillo"
+            android:shadowColor="@color/aguamarina"
+            android:gravity="center"
+            android:textColor="@color/azul"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

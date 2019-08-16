@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="?android:attr/selectableItemBackground" >
+
+    <ImageView
+        android:id="@+id/foto"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:src="@mipmap/ic_launcher" />
+    <TextView android:id="@+id/juego"
+        android:gravity="center_vertical"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="match_parent"
+        android:textStyle="bold"
+        android:textSize="15sp" />
+    <TextView android:id="@+id/jugador"
+        android:gravity="center_vertical"
+        android:layout_width="0dp"
+        android:layout_weight="5"
+        android:layout_height="match_parent"
+        android:textStyle="bold"
+        android:textSize="15sp" />
+    <TextView android:id="@+id/tiempo"
+        android:gravity="center_vertical"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="match_parent"
+        android:textStyle="bold"
+        android:textSize="15sp" />
+
+
+
+</LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item android:id="@+id/version_infinito"
+        android:title="Versión Infinito"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/version_original"
+    android:title="Version Original"
+    app:showAsAction="always"/>
+
+    <item android:id="@+id/version_carlos"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Version Custom"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/version_OnClick"
+        android:title="Version OnClick"
+        app:showAsAction="always"/>
+
+</menu>

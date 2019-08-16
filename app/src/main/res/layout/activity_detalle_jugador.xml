@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetalleJugador">
+
+<LinearLayout
+    android:id="@+id/principal"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/foto"
+            android:onClick="agrandar"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="180dp"
+            android:layout_height="190dp"
+            android:src="@drawable/picture" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtfiltrado"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Filtrar por : Juego,Jugador o Tiempo"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <TextView
+            android:tag="foto"
+            android:onClick="ordenar"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:background="@color/cian"
+            android:gravity="center"
+            android:text="FOTO" />
+        <TextView
+            android:tag="juego"
+            android:onClick="ordenar"
+            android:id="@+id/txtordenarJuego"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:background="@color/amarillo"
+            android:gravity="center"
+            android:text="JUEGO" />
+
+        <TextView
+            android:tag="jugador"
+            android:onClick="ordenar"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="match_parent"
+            android:background="@color/aguamarina"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/txtordenarJugador"
+            android:text="JUGADOR" />
+
+        <TextView
+            android:tag="tiempo"
+            android:onClick="ordenar"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:gravity="center_vertical"
+            android:text="TIEMPO"
+            android:id="@+id/txtordenarportiempo" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/RecView"
+            android:layout_width="match_parent"
+            android:visibility="visible"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnvolver"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="volveramenu"
+            android:text="volver"/>
+
+
+    </LinearLayout>
+</LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/foto1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="agrandar"
+            android:src="@drawable/picture"
+            android:visibility="invisible" />
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
