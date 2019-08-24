@@ -149,65 +149,10 @@ public class SplitViewCopia extends AppCompatActivity {
         Log.i("MIAPP","onCreate");
         continuarpor = 0;
 
-
-        //******************************//
-        //Recupar Datos de Preferencias //
-        //******************************//
-        // RECORD = "RecordPartidaAnterior";
-        // CLAVE = "RecordPartidaAnteriorClave";
-        // JUGADOR = "Jugadornombre";
-        // JUGADORCLAVE = "Jugadornombreclave";
-        // Definicion de los nombre de los futuros ficheros xml que se van a crear
-        //
-/*
-        SharedPreferences prefs = getSharedPreferences(RECORD,MODE_PRIVATE);  // no la uso
-        SharedPreferences prefs1 = getSharedPreferences(JUGADOR,MODE_PRIVATE);// no la uso
-        SharedPreferences pref2 = getSharedPreferences("arraydatalog",MODE_PRIVATE);
-        SharedPreferences pref1 = getSharedPreferences("Serializados",MODE_PRIVATE);
-*/
-        //*********************************************************************//
-        //Datos de los ficheros "RecordPartidaAnterior" y "Jugadornombreclave" //
-        //*********************************************************************//
-/*
-        Float pepe = prefs.getFloat(CLAVE,0);
-        String pepe1 = prefs1.getString(JUGADORCLAVE,"sin nombre");
-        recordjuego = pepe;
-        jugadorRecord = pepe1;
-        Log.i("MIAPP","SplitViewCopia-onCreate-recordjuego"+recordjuego);
-        Log.i("MIAPP","SplitViewCopia-onCreate-jugadorRecord"+jugadorRecord);
-*/
-        //*********************************//
-        //Datos del fichero "Serializados" //
-        //*********************************//
-        // arrayDataLog <---"valornuevo"
-/*
-        String p2 = pref1.getString("valornuevo","[{}]");
-        top10 = Puntuacion.getTop();
-        Log.i("MIAPP","SplitViewCopia-onCreate-Serializados-recibido p2 es :"+ p2);
-        Log.i("MIAPP","SplitViewCopia-onCreate-Serializados-recibido top10 es :"+ top10);
-        //********************************* //
-        //Datos del fichero "arraydatalog" //
-        //********************************* //
-        int size = pref2.getInt("size", -1);   //<--del fichero "arraydatalog"
-        if (size >0 ) {             // si tengo algo guardado lo recupero sino no hago nada
-            arrayDataLog.clear();   // borro el array
-            for (int i = 0; i < size; i++)
-                arrayDataLog.add(i, pref2.getString("Indice " + i, null));
-        }
-        Log.i("MIAPP","SplitViewCopia-onCreate-arrayDatalog- recibido de preferences es: "+arrayDataLog);
-*/
         //******************************* //
-        // Recupero los datos del Intent //
+        // Recupero los datos del Intent  //
         //******************************* //
         if (getIntent().getExtras() != null) {
-        //    int continuarpor = getIntent().getIntExtra("continuarpor",0);
-        //    if (continuarpor==1){
-              //  setContentView(R.layout.activity_split_view_copia);
-              //  otraVez();
-              //  finish();
-        //    }else {
-
-        //    }
             t1Start = System.currentTimeMillis();
             contardorToques = getIntent().getIntExtra("toques", 2);  // numero de toques
             cajasportoque = getIntent().getIntExtra("cajas", 2);
@@ -223,9 +168,7 @@ public class SplitViewCopia extends AppCompatActivity {
             }
             uri_destino = null;
             file = new File(ruta_captura_foto);
-
             try { //INTENTA ESTO
-
                 if (file.createNewFile()) {
                     Log.d("MIAPP", "FICHERO CREADO");
                 } else {
@@ -234,12 +177,7 @@ public class SplitViewCopia extends AppCompatActivity {
             } catch (IOException e) { // Y SI FALLA SE METE POR AQUÍ
                 Log.e("MIAPP", "Error al crear el fichero", e);
             }
-
             photo_uri = Uri.fromFile(file);
-
-            //     if (jugadoractual.toString().isEmpty()){
-            //         jugadoractual="Desconocido";
-            //     }
             // estas las voy a dejar sin valor
             record = getIntent().getIntExtra("record", 0);
             numerodeCajas = getIntent().getIntExtra("recordporcajas", 1);
@@ -251,24 +189,6 @@ public class SplitViewCopia extends AppCompatActivity {
         arrayData.add(3, "no"); // No -Por defecto este jugador no tiene el record
         Log.i("MIAPP", "SplitViewCopia-onCreate-jugadorActual es: " + jugadoractual);
 
-        // EJEMPLO CONVERSION JSON
-        /**
-         Gson gson = new Gson();
-         String puntuacion_json = gson.toJson(p2);
-         Log.i("MIAPP","JSON"+puntuacion_json);
-         // para leer
-         Log.i("MIAPP","El json recibido es : "+ p2);
-         */
-
-        // TODO por aqui voy
-        //invalidateOptionsMenu();
-        //logojugarahora.setVisible(false);
-
-        //disableButtonFlagJugarAhora = true;
-
-        //menu1.findItem(R.id.jugarahora).setEnabled(false);
-        // menujuego = findViewById(R.id.jugarahora);
-        // menujuego.setVisibility(View.INVISIBLE);
     }
 // **************************************************************************************
 // para añadir el APP Bar
@@ -280,78 +200,24 @@ public class SplitViewCopia extends AppCompatActivity {
         Log.i("MIAPP","onCreateOptionsMenu");
         myMenu = menu;
         getMenuInflater().inflate(R.menu.menu1, menu);
-
         MenuItem timerItem = menu.findItem(R.id.break_timer);
         MenuItem timerItem1 = menu.findItem(R.id.juego);
-
         jugarahoraItem1 = menu.findItem(R.id.jugarahora);
         jugarahoraItem1.setVisible(false);
-
         resultadosItem1 = menu.findItem(R.id.resultados);
         resultadosItem1.setVisible(false);
-
         timerItem.setVisible(true);
         timerText = (TextView) MenuItemCompat.getActionView(timerItem);
         timerText.setText("Presiona sobre la pantalla");
-
-
         timerText = (TextView) MenuItemCompat.getActionView(timerItem);
         timerJuego = (TextView) MenuItemCompat.getActionView(timerItem1);
-
         timerText.setPadding(10, 0, 10, 0); //Or something like that...
         timerJuego.setPadding(1, 0, 10, 0);
-
         startTimer(300000, 1000); //One tick every second for 30 seconds
-        /*
-        ReverserChronometer.ReverseChronometer rc=(ReverserChronometer.ReverseChronometer)menu
-                .findItem(R.id.countdown)
-                .getActionView();
-
-        rc.setOverallDuration(40*60);
-        rc.setWarningDuration(5*60);
-        rc.setOnClickListener((View.OnClickListener) this);
-        rc.setOnLongClickListener((View.OnLongClickListener) this);
-        rc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-        rc.setTextColor(Color.WHITE);
-*/
-
-        // if (timer== null){
-        //     timer = "00:00";
-        // }
-        //    MenuItem menuItem = menu.findItem(R.id.tiempo);
-        //    menuItem.setTitle(timer);
         Log.i("MIAPP", "SplitViewCopia-onCreateOptionsMenu es timer : " + timer);
-
-        // para crear uno nuevo por codigo
-        //    menu.add("Fulanito");
-        // para guardar el menu ,,,por si luego lo necesito
-        //    this.menureferencia = menu;
-
-        //  logojugarahora = (MenuItem) menu.findItem(R.id.jugarahora);
-
-
-        /**
-         for(int i=0; i<menu.size(); i++){
-         menu.getItem(i).setEnabled(jugarahora);
-         }
-
-         if (disableButtonFlagJugarAhora == true){
-         menu.findItem(R.id.jugarahora).setEnabled(false);
-         }
-         */
         return super.onCreateOptionsMenu(menu);
-
-
     }
 
-    private void cambiarColor(View view){
-        randNum = rand.nextInt(1) + 0;
-        if (randNum== 1){
-           // view.setBackgroundColor(randomColor());
-        }else {
-            // color negro
-        }
-    }
 
     private void startTimer(long duration, final long interval) {
         CountDownTimer timer = new CountDownTimer(duration, interval) {
@@ -395,40 +261,6 @@ public class SplitViewCopia extends AppCompatActivity {
     }
 
 
-    private String secondsToString(int improperSeconds) {
-
-        //Seconds must be fewer than are in a day
-/*
-        Time secConverter = new Time(improperSeconds);
-
-        secConverter.setTime(improperSeconds);
-        secConverter.minute = 0;
-        secConverter.second = 0;
-
-        secConverter.second = improperSeconds;
-        secConverter.normalize(true);
-
-        String hours = String.valueOf(secConverter.hour);
-        String minutes = String.valueOf(secConverter.minute);
-        String seconds = String.valueOf(secConverter.second);
-
-        if (seconds.length() < 2) {
-            seconds = "0" + seconds;
-        }
-        if (minutes.length() < 2) {
-            minutes = "0" + minutes;
-        }
-        if (hours.length() < 2) {
-            hours = "0" + hours;
-        }
-
-        String timeString = hours + ":" + minutes + ":" + seconds;
-        return timeString;
-        */
-        String timeString = "00";
-        return timeString;
-    }
-
 
     public static void setVar1(int val){
         var1=val;
@@ -455,69 +287,22 @@ public class SplitViewCopia extends AppCompatActivity {
 
         } else {
             if (continuarpor == 2){
-               // resultadosItem1 = myMenu.findItem(R.id.resultados);
-               // resultadosItem1.setVisible(true);
-               // jugarahoraItem1 = myMenu.findItem(R.id.jugarahora);
-               // jugarahoraItem1.setVisible(false);
-               // iniciar();
-               // continuarpor = 1;
-  //              SharedPreferences prefs = getSharedPreferences(PULSADO,MODE_PRIVATE);// no la uso
-  //              String pulsado = prefs.getString(PULSADOCLAVE,"continuar");
-
-
                 Log.i("traceo","SplitViewCopia-onResume- lo que vale var1 al leerla es: "+ var1);
                 if (var1 == 2){ //2// se ha pulsado ver resultados
                     verresultados();
-
                 }else {// 1// se ha pulsado jugar otra vez
                     jugarahoraItem1 = myMenu.findItem(R.id.jugarahora);
                     resultadosItem1 = myMenu.findItem(R.id.resultados);
-
                     resultadosItem1.setVisible(false);
                     jugarahoraItem1.setVisible(false);
                     Reiniciar(vista);
-
                 }
-
-
             }
-
         }
-
         //invalidateOptionsMenu();
-
         super.onResume();
     }
 
-/*
-    public void contadortiempo() {
-        invalidateOptionsMenu();
-     //   Activity n = new SplitViewCopia();
-        getMenuInflater().inflate(R.menu.menu1, myMenu);
-        MenuItem menuItem = myMenu.findItem(R.id.tiempo);
-        menuItem.setTitle(timer);
-        //n.onCreateOptionsMenu(myMenu);
-        int TIEMPOACTUALIZACRONO = 1000;
-        int TIEMPOTURNO = 30000;
-        // Cronometro para el jugador 1
-        cronometro1 = new CountDownTimer(TIEMPOTURNO, TIEMPOACTUALIZACRONO) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timer = millisUntilFinished / 1000 + "";
-                Log.i("MIAPP", "SplitViewCopia-contadortiempo es timer : " + timer);
-
-                //tiempoJ1.setText(millisUntilFinished / 1000 + "");
-            }
-
-            @Override
-            public void onFinish() {
-
-                cronometro1.cancel();
-
-            }
-        };
-    }
-*/
 
 public void verresultados(){
     Intent intentresultados = new Intent(SplitViewCopia.this, Resultados.class);
@@ -565,34 +350,13 @@ public void verresultados(){
                 cargardatosIntent(continuarpor);
          //       iniciar();
                 //marcarColor(vista);
-
                 break;
-
-
             default:
                 Log.i("MIAPP", "onOptionsItemSelected-Raro...raroooooo");
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
-    private void iniciar() {
-        MenuItem timerItem = myMenu.findItem(R.id.break_timer);
-        timerItem.setVisible(false);
-
-        t1Start = System.currentTimeMillis();
-        vista = findViewById(R.id.root);
-        texto = findViewById(R.id.txtpausar);
-        boton = findViewById(R.id.btnContinuar);
-        texto.setText("¿ Listo para empezar el Juego ?");
-        boton.setText("Iniciar Juego");
-
-        vista.setVisibility(View.INVISIBLE);
-        texto.setVisibility(View.VISIBLE);
-        boton.setVisibility(View.VISIBLE);
-        Log.i("MIAPP", "SplitViewCopia-iniciar()");
-    }
 
 
     private int randomColor() {
@@ -611,7 +375,6 @@ public void verresultados(){
         if (vista instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) vista;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
-
                 View vistahija = viewGroup.getChildAt(i);
                 vistahija.setClickable(false);
                 vistahija.setOnClickListener(new View.OnClickListener() {
@@ -629,7 +392,6 @@ public void verresultados(){
         if (vista instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) vista;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
-
                 View vistahija = viewGroup.getChildAt(i);
                 vistahija.setBackgroundColor(randomColor());
                 vistahija.setClickable(false);
@@ -646,17 +408,13 @@ public void verresultados(){
 
 
     public void dividir(View view) {
-
         if (jugarahora == false) {
             jugarahoraItem1 = myMenu.findItem(R.id.jugarahora);
             resultadosItem1 = myMenu.findItem(R.id.resultados);
-
             resultadosItem1.setVisible(false);
             jugarahoraItem1.setVisible(true);
-
             // LA FORMULA ES: (CONTADOR -1)+cajasportoque
             numerodeCajas = (numerodeCajas - 1) + cajasportoque;
-
             Log.i("MIAPP", "SplitViewCopia-dividir()-Contador de cuadros  es: " + numerodeCajas);
             limite(contador1);
             contador1 = contador1 + 1;
@@ -678,7 +436,6 @@ public void verresultados(){
     public void marcarColor(View view) {
         // Si ya se ha pulsado el Boton Inicio entonces --true
         // eso quiere decir que empezamos a poder cambiar cajas de colores
-
         //id = view.findViewById(R.id.bloque1);
         LinearLayout x = (LinearLayout) view;
         Log.i("MIAPP", "SplitViewCopia--marcarColor(view) -inicio es : " + inicio);
@@ -695,7 +452,6 @@ public void verresultados(){
                     randNum = 0;    // FACIL
                 }
             }
-
             Log.i("MIAPP","randNum es: "+randNum);
             if (ids.size() == 0) {
 
@@ -732,7 +488,6 @@ public void verresultados(){
             }
             Log.i("MIAPP", "SplitViewCopia--marcarColor(view)-array momentaneo ids es: " + ids);
             Log.i("MIAPP", "SplitViewCopia--marcarColor(view)-el linear pulsado es " + x.getId());
-
             if (bloqueclick == false) {
                 //view.setBackgroundColor(Color.red(100000));
                 view.setBackgroundColor(getResources().getColor(R.color.negro));
@@ -756,7 +511,6 @@ public void verresultados(){
         } else {
             // No hay que hacer nada aun . Esperar a que el boton INICIAR se presione
         }
-
         //view.setOnClickListener(new View.OnClickListener() {public void onClick(View v) { marcarColor(v); }});
     }
 
@@ -764,7 +518,6 @@ public void verresultados(){
     private LinearLayout crearHijo(int orientacion) {
         LinearLayout nueva_caja = null;
         LinearLayout.LayoutParams parametros = null;
-
         nueva_caja = new LinearLayout(this);
         nueva_caja.setId(newId());
         int id_creado = nueva_caja.getId();
@@ -796,10 +549,7 @@ public void verresultados(){
         Log.i("MIAPP","el contador maximo toques es : "+contardorToques);
         if (this.contador1 > contardorToques) {
             Toast.makeText(this, "HAS ALCANZADO EL NUMERO MAXIMO DE TOQUES ***EMPIEZA A JUGAR*** ", Toast.LENGTH_LONG).show();
-
             jugarahora = true;
-
-
             //quitar onclick de todos las cajas
             // recorrer y crear nuevo onclick,,con el nuevo link al metodo
             // empiezo a recorrer desde el primero .--llamado root
@@ -811,12 +561,7 @@ public void verresultados(){
             continuarpor = 2;
             leerRecordporJuego();
             cargardatosIntent(continuarpor);
-
-
-
-
         }
-
     }
 
 
@@ -828,8 +573,6 @@ public void verresultados(){
                 dividir(v);
             }
         });
-
-
         hijo2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dividir(v);
@@ -837,15 +580,6 @@ public void verresultados(){
         });
     }
 
-
-    /**
-     * Es el ID calculado
-     * Va generando números aleatorios. Comprueba que el valor generado
-     * no coincide con un ID existente y si no existe devuelvo el nuevo
-     * valor.
-     *
-     * @return
-     */
 
     private int newId() {
         int resultado = -1;
@@ -888,7 +622,6 @@ public void verresultados(){
             jugarahoraItem = findViewById(R.id.jugarahora);
 //            resultadosItem.setVisibility(View.INVISIBLE);
 //            jugarahoraItem.setVisibility(View.INVISIBLE);
-
             t1Start = System.currentTimeMillis();
             t1Duraciont1Startt1Pause = 0;
             vista = findViewById(R.id.root);
@@ -903,12 +636,8 @@ public void verresultados(){
             boton.setVisibility(View.INVISIBLE);
             ids.clear();
             num_veces = 0;
-
-
         } else {
             // continuamos con el procedimiento normal
-
-
             // hay que poner el procedimiento de poner invisible text y boton
             // despues se retoma la activity y ya se puede continuar jugando
             // ademas hay que restablecer los contadores de tiempo
@@ -931,13 +660,10 @@ public void verresultados(){
         // hay que poner el procedimiento de poner invisible text y boton
         // despues se retoma la activity y ya se puede continuar jugando
         // ademas hay que restablecer los contadores de tiempo
-
-
         otrojuego = 1;
         empiezajuego = false;
         resultadosItem = findViewById(R.id.resultados);
         jugarahoraItem = findViewById(R.id.jugarahora);
-
         resultadosItem1 = myMenu.findItem(R.id.resultados);
         resultadosItem1.setVisible(false);
 //        resultadosItem.setVisibility(View.VISIBLE);
@@ -954,55 +680,29 @@ public void verresultados(){
         }
         Log.i("MIAPP", "SplitViewCopia-otraVez()-tiempo de juego : " + t1Duraciont1Startt1Pause);
 
-        //TODO ahora hay que ver si hay record para eso leer los datos en DB
-
+        //  CALCULA SI HAY O NO RECORD -devuelve "record" 1 si 0 no
+        //  TAMBIEN BUSCA PARTIDA EN BASE DATOS
+        //  -Si es la primera partida para este juego lo inserto en PARTIDA y PARTIDARECORD
+        //  -Si no es la primera partida y tiene record inserto en PARTIDA y PARTIDARECORD
+        //  -Si no es la primera partida y no tiene record solo la inserto en PARTIDA
         comprobarSihayRecord(numerodeCajas, jugadoractual, t1Duraciont1Startt1Pause, sinAvatar);
-
-        // calcula si hay o no record y devuelve record 1 o 0
-        //       calcularRecordPorJuego(numerodeCajas,jugadoractual,t1Duraciont1Startt1Pause);
-
-        /**
-         if (recordjuego == 0) {
-         // PRIMERA PARTIDA - HAY RECORD
-         recordjuego = t1Duraciont1Startt1Pause;
-         record = 1;
-
-         } else {
-         // VER SI HAY NUEVO RECORD
-         if (t1Duraciont1Startt1Pause < recordjuego) {
-         // HAY RECORD
-         recordjuego = t1Duraciont1Startt1Pause;
-         record = 1;
-         } else {
-         // CONTINUA EL RECORD ANTERIOR
-
-         }
-         }
-         */
-        arrayData.remove(3);
+       arrayData.remove(3);
         arrayData.add(3, "no"); // no -indica que este jugador no tiene el record
         if (record == 1) {
             //jugadorRecord = jugadoractual;
             jugadorRecord = jugadoractual;
             avatatarrecord = sinAvatar;
-            guardarJugador();
         }
-
         mostrarRecord(t1Duraciont1Startt1Pause, record, numerodeCajas);
-
     }
 
     public void setearImagenDesdeArchivo(int resultado, Uri photo_uri, Puntuacion id) {
         switch (resultado) {
-
             case RESULT_OK:
                 Log.i("MIAPP", "La foto ha sido seleccionada");
-
                 // photo_uri = data.getData();//obtenemos la uri de la foto seleccionada
                 Log.i("MIAPP", "SplitViewCopia-setearImagenDesdeArchivo-photo_uri.getPath es : " + photo_uri.getPath());
                 Log.i("MIAPP", "SplitViewCopia-setearImagenDesdeArchivo-getID es : " + id);
-
-
                 InputStream imageStream = null;
                 try {
                     imageStream = getContentResolver().openInputStream(photo_uri);
@@ -1181,23 +881,6 @@ public void verresultados(){
 
     }
 
-    public void guardarJugador() {
-
-        Log.i("MIAPP", "SplitViewCopia-guardarJuagador-jugadorRecord es :" + jugadorRecord);
-        // primero defino una nueva
-        // JUGADOR = "Jugadornombre"
-        // JUGADORCLAVE = "Jugadornombreclave"
-        SharedPreferences prefs = getSharedPreferences(JUGADOR, MODE_PRIVATE);
-        // Entro en modo Edicion
-        SharedPreferences.Editor editor = prefs.edit();
-        // Asigno una clave para acceder poner la informacion que quiero
-        //   CLAVE <-----recordjuego
-        editor.putString(JUGADORCLAVE, jugadorRecord);
-        editor.commit();
-        arrayData.remove(3);
-        arrayData.add(3, "yes"); // yes -indica que este jugador tiene record
-
-    }
 
     private void mostrarRecord(double t1Duraciont1Startt1Pause, int record, int numerodeCajas) {
         //***************************************************//
@@ -1257,28 +940,28 @@ public void verresultados(){
         //***************************************************//
         // Guardar record actual puntuacion1 en Preferences  //
         //***************************************************//
-        SharedPreferences pref1 = getSharedPreferences("Serializados", MODE_PRIVATE);
-        SharedPreferences.Editor editor1 = pref1.edit();
+//        SharedPreferences pref1 = getSharedPreferences("Serializados", MODE_PRIVATE);
+//        SharedPreferences.Editor editor1 = pref1.edit();
         // convertir a JSON (hay libreria externa de gooble-GSON)
         // 1-importar la libreria- ir menu/build/editlibriryandDependencies
         //                          + libreryDependecies
         //                       busco gson y descargo la de google
         // declaro objeto gson
-        Gson gson = new Gson();
+//        Gson gson = new Gson();
 
         // guardo el Json como si fuera un string para poder pasarlo a las Preferences
-        String puntuacion_json1 = gson.toJson(top10);
-        editor1.putString("valornuevo", puntuacion_json1);
-        editor1.commit();
+//        String puntuacion_json1 = gson.toJson(top10);
+ //       editor1.putString("valornuevo", puntuacion_json1);
+ //       editor1.commit();
         //************************************************************//
         // Guardar array total con todas las partidas en Preferences  //
         //************************************************************//
-        SharedPreferences pref = getSharedPreferences("arraydatalog", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("size", arrayDataLog.size());
-        for (int i = 0; i < arrayDataLog.size(); i++)
-            editor.putString("Indice " + i, arrayDataLog.get(i));
-        editor.commit();
+//        SharedPreferences pref = getSharedPreferences("arraydatalog", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = pref.edit();
+//        editor.putInt("size", arrayDataLog.size());
+//        for (int i = 0; i < arrayDataLog.size(); i++)
+//            editor.putString("Indice " + i, arrayDataLog.get(i));
+//        editor.commit();
 
 
         // prueba DB //
@@ -1476,13 +1159,13 @@ public void verresultados(){
         // primero defino una nueva
         // RECORD = "RecordPartidaAnterior"
         // CLAVE = "RecordPartidaAnteriorClave"
-        SharedPreferences prefs = getSharedPreferences(RECORD, MODE_PRIVATE);
+//        SharedPreferences prefs = getSharedPreferences(RECORD, MODE_PRIVATE);
         // Entro en modo Edicion
-        SharedPreferences.Editor editor = prefs.edit();
+//        SharedPreferences.Editor editor = prefs.edit();
         // Asigno una clave para acceder poner la informacion que quiero
         //   CLAVE <-----recordjuego
-        editor.putFloat(CLAVE, (float) recordjuego);
-        editor.commit();
+//        editor.putFloat(CLAVE, (float) recordjuego);
+//        editor.commit();
 
     }
 }

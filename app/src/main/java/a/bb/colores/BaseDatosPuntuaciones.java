@@ -111,6 +111,10 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
 
                 if (juego1==null) {// primera partida encontrada
                         juego1 = cursor.getString(3);
+                        int tempjuego1int = Integer.parseInt(juego1);
+                        if (tempjuego1int<10){
+                            juego1 = "0"+juego1;
+                        }
                         // añado juego a la lista de encontrados
                         arrayListjuegosbuscados.add(juego1);
                         juego = (new Puntuacion(aux_id, jugador, tiempo, juego1, record,sinAvatar,rotada,nivel));
@@ -125,6 +129,10 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
                     // 1 - SI entonces continuar busqueda
                     // 2-  NO almacenar esta partida
                     juego1 = cursor.getString(3);
+                    int tempjuego1int = Integer.parseInt(juego1);
+                    if (tempjuego1int<10){
+                        juego1 = "0"+juego1;
+                    }
                     Boolean recordEncontrado= false;
                     for (int x=0;x<arrayListjuegosbuscados.size();x++){
                         if (arrayListjuegosbuscados.get(x).toString().contains(juego1)){
@@ -216,6 +224,10 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
 
                     if (jugador.toString().contains(jugadorelegido)) {
                         juego1 = cursor.getString(3);
+                        int tempjuego1int = Integer.parseInt(juego1);
+                        if (tempjuego1int<10){
+                            juego1 = "0"+juego1;
+                        }
                         // añado juego a la lista de encontrados
                         arrayListjuegosbuscados.add(juego1);
                         juego = (new Puntuacion(aux_id, jugador, tiempo, juego1, record, sinAvatar,rotada,nivel));
@@ -231,6 +243,10 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
                     // 1 - SI entonces continuar busqueda
                     // 2-  NO almacenar esta partida
                     juego1 = cursor.getString(3);
+                    int tempjuego1int = Integer.parseInt(juego1);
+                    if (tempjuego1int<10){
+                        juego1 = "0"+juego1;
+                    }
                     Boolean recordEncontrado= false;
                     if (jugador.toString().contains(jugadorelegido)) {
                         for (int x = 0; x < arrayListjuegosbuscados.size(); x++) {
@@ -333,6 +349,10 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
                 jugador = cursor.getString(1); //la posicion segunda, el id
                 tiempo = cursor.getString(2);
                 juego1 = cursor.getString(3);
+                int tempjuego1int = Integer.parseInt(juego1);
+                if (tempjuego1int<10){
+                    juego1 = "0"+juego1;
+                }
                 record = cursor.getString(4);
                 sinAvatar = cursor.getString(5);
                 rotada = cursor.getString(6);
@@ -396,6 +416,10 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
                     jugador = cursor.getString(1); //la posicion segunda, el id
                     tiempo = cursor.getString(2);
                     juego1 = cursor.getString(3);
+                    int tempjuego1int = Integer.parseInt(juego1);
+                    if (tempjuego1int<10){
+                        juego1 = "0"+juego1;
+                    }
                     record = cursor.getString(4);
                     sinAvatar = cursor.getString(5);
                     rotada = cursor.getString(6);
@@ -455,6 +479,10 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
             jugador = cursor.getString(1); //la posicion segunda, el id
             tiempo = cursor.getString(2);
             juego1 = cursor.getString(3);
+            int tempjuego1int = Integer.parseInt(juego1);
+            if (tempjuego1int<10){
+                juego1 = "0"+juego1;
+            }
             record = cursor.getString(4);
             sinAvatar = cursor.getString(5);
             rotada = cursor.getString(6);
@@ -508,6 +536,11 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
             jugador = cursor.getString(1); //la posicion segunda, el id
             tiempo = cursor.getString(2);
             juego1 = cursor.getString(3);
+            int tempjuego1int = Integer.parseInt(juego1);
+            if (tempjuego1int<10){
+                juego1 = "0"+juego1;
+            }
+
             record = cursor.getString(4);
             sinAvatar = cursor.getString(5);
             rotada = cursor.getString(6);

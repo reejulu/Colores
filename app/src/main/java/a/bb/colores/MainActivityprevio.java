@@ -2,10 +2,6 @@ package a.bb.colores;
 
 
 import android.Manifest;
-import android.animation.AnimatorSet;
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -14,21 +10,24 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,20 +37,20 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Random;
-import a.bb.colores.recycler.Partida;
+
+import static a.bb.colores.R.drawable.picture;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityprevio extends AppCompatActivity {
     NumberPicker numberPicker;
     NumberPicker numberPicker1;
     Button continuar;
@@ -80,13 +79,33 @@ public class MainActivity extends AppCompatActivity {
     Uri original_photo_galery_uri;
     String original_photo_galery_uriString;
 
+    boolean inicio = false;
+    Random rand = new Random();
+    int randNum ;
+    ArrayList<Integer> ids = new ArrayList<Integer>();
+    private int num_veces;
+    boolean bloqueclick;
+    int numerodeCajas = 1;  // valor inicial para ver numero de cajas totales depues de cade click
+    int contador = 0;
+    private static Random r = new Random();
+    ArrayList<Integer>  lista = new ArrayList<Integer>();
+    int animUnit1;
+    int idseleccionado;
+    int x;
+    CountDownTimer yourCountDownTimer;
+    Boolean listahecha = false;
+    int contadorpantallas = 0;
+    String root;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicial_colores);
         vista = findViewById(R.id.root2);
-        SplitViewCopia splitViewCopia = new SplitViewCopia();
-        splitViewCopia.recorrerLayoutsycolorear(vista);
+        lista.clear();
+        recorrerLayoutsycolorear(vista);
+        listahecha = true;
+
         avatarJugador = findViewById(R.id.foto);
         int i = randomColor();
         //avatarJugador.setColorFilter(i);
@@ -94,30 +113,22 @@ public class MainActivity extends AppCompatActivity {
         continuar = findViewById(R.id.continuarsi);
         editText = findViewById(R.id.jugadornombre1);
         TextView tv = (TextView) findViewById(R.id.titulo);
+        tv.setText("SELECCIONA");
         // GETINTENT TRAE VALORES CUANDO SE HA JUGADO Y VIENE DESDE RESULTADOS.JAVA
         if (getIntent().getExtras() != null) {
             editText.setVisibility(View.VISIBLE);
             jugador = getIntent().getStringExtra("nombre");
             editText.setText(jugador);
             sinAvatarString = getIntent().getStringExtra("avatardesdeResultados");
-            int desdeMainActivityprevio = getIntent().getIntExtra("desdeprevio",0);
-            if (desdeMainActivityprevio == 1){
-                original_photo_galery_uriString = getIntent().getStringExtra("fotoinicio");
-                Button button = findViewById(R.id.continuarsi);
-                button.setVisibility(View.VISIBLE);
-            }else {
-                original_photo_galery_uriString = getIntent().getStringExtra("originaluri");
-            }
+            original_photo_galery_uriString = getIntent().getStringExtra("originaluri");
             rotada = getIntent().getIntExtra("rotadevuelta",0);
             if (sinAvatarString.toString().contains("false")){
-                sinAvatar = false;
                 loadImagefromExternalmemory();
                 Button button = findViewById(R.id.continuarsi);
                 button.setVisibility(View.VISIBLE);
             }else {
-                sinAvatar = true;
                 // avatar_foto.setColorFilter(i);
-                avatarJugador.setImageResource(R.drawable.picture);
+                avatarJugador.setImageResource(picture);
             }
         }
         //editText.setText(jugador);
@@ -165,6 +176,15 @@ public class MainActivity extends AppCompatActivity {
                     SplitViewCopia splitViewCopia = new SplitViewCopia();
                     splitViewCopia.recorrerLayoutsycolorear(vista);
                 } else {
+                    if (contador== 0) {
+                        tv.setText("SELECCIONA Y");
+                        contador = 1;
+                    }else {
+                        tv.setText("ENCUENTRAME");
+                        tv.setTextSize(1,35);
+                        contador = 0;
+                    }
+
                     tv.setTextColor(randomColor());
                 }
             }
@@ -177,34 +197,216 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
-    public void Proseguir(View view) {
-        editText = findViewById(R.id.jugadornombre1);
-        if (editText.getText().toString().isEmpty()){
-            editText.setText(jugador);
-        }else {
-            jugador = editText.getText().toString();
+    public void changeTextColor1(final View vista, final int startColor, final int endColor,
+                                 final long animDuration, final long animUnit) {
+        if (vista == null) return;
+
+        yourCountDownTimer = new CountDownTimer(animDuration, animUnit) {
+            //animDuration is the time in ms over which to run the animation
+            //animUnit is the time unit in ms, update color after each animUnit
+            @Override
+            public void onTick(long l) {
+                //tv.setText("COLORES");
+                if (startColor == 1) {
+                    //            lista.clear();
+
+                    recorrerLayoutsycolorear(vista);
+                    Log.i("traceillo", "lista size es : " + lista.size());
+                    //            Log.i("traceillo", "lista tiene : " + lista.toString());
+                    Random r = new Random();
+                    x = lista.get(r.nextInt(lista.size()));
+                    LinearLayout kk = findViewById(x);
+                    kk.setTag("si");
+                    // COMPROBAMOS SI HAY IMAGEN O AVATAR
+                    //   kk.setBackgroundResource(picture);
+                    if (sinAvatar == false) {
+                        String nombreArchivo = "COLORES_PIC";
+                        String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath() + "/" + nombreArchivo + ".JPEG";
+                        Bitmap bitmap = BitmapFactory.decodeFile(root);
+                        BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+                        kk.setBackground(bitmapDrawable);
+                        Uri urifile;
+                        File file1 = new File(root);
+                        urifile = Uri.fromFile(file1);
+                        // UNA VEZ GUARDADO . VEO COMO SE HA GUARDADO PARA ESO VEO EL uri anterior
+                        rotada = getCameraPhotoOrientation(getBaseContext(), urifile, urifile.getPath());
+                        kk.setRotation(rotada);
+                    }else {
+                        kk.setBackgroundResource(picture);
+                    }
+
+                    contadorpantallas = contadorpantallas + 1;
+             //       if (contadorpantallas == 2){
+             //           yourCountDownTimer.cancel();
+             //       }
+
+                    //EN ESTE PUNTO TENGO LA PANTALLA COLOREADA Y UNA CASILLA CON LA IMAGEN
+                    Log.i("traceillo", "el id seleccionado es :" + x);
+                    Log.i("traceillo", "el id seleccionado es kk.getId :" + kk.getId());
+
+                    //     vista.setId(x);
+                    //     vista.getId();
+                    //     vista.setBackgroundColor(Color.BLACK);
+                    //         vista.setBackgroundResource(picture);
+
+                } else {
+                    if (contador == 0) {
+                        tv.setText("SELECCIONA Y");
+                        contador = 1;
+                    } else {
+                        tv.setText("ENCUENTRAME");
+                        tv.setTextSize(1,35);
+                        contador = 0;
+                    }
+
+                    tv.setTextColor(randomColor());
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                //CUANDO EXPIRA EL TIEMPO- VUELVO A PEDIR LA GENERACION DE LA PANTALLA + LA CASILLA CON LA IMAGEN
+                if (animUnit1 < 2000) {
+                    animUnit1 = animUnit1 + 200;
+                    Log.i("traceillo", "valor j es :" + animUnit);
+                    changeTextColor1(vista, 1, 0, 10000, animUnit1);
+                }
+
+                //   tv.setText("COLOR");
+                //   tv.setTextColor(randomColor());
+            }
+        }.start();
+    }
+
+    public void recorrerLayoutsycolorear(View vista) {
+        // Log.d(getClass().getCanonicalName(), vista.getClass().getCanonicalName());
+        if (vista instanceof ViewGroup) {
+
+            ViewGroup viewGroup = (ViewGroup) vista;
+
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                final View vistahija = viewGroup.getChildAt(i);
+                // ALMACENO TODOS LOS HIJOS EN UN ARRAY-lista
+                // solo almaceno una vez la lista en caso listahecha = false
+                if (listahecha == false) {
+                    if (vistahija.getId() != -1) {
+                        lista.add(vistahija.getId());
+                    }
+                }
+
+                //       vistahija.setBackgroundResource(picture);
+                vistahija.setBackgroundColor(randomColor());
+                vistahija.setTag("no");
+                //    vistahija.setBackgroundColor(Color.BLUE);
+
+
+                vistahija.setClickable(true);
+
+                vistahija.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        String tag = v.getTag().toString();
+                        Log.i("traceillo", "tag pinchado es : " + tag);
+                        Log.i("traceillo", "tag pinchado es (id): " + v.getId());
+                        Log.i("traceillo", "el id actual x es :" + x);
+                        if (tag.contains("si")) {
+                            yourCountDownTimer.cancel();
+                            Log.i("traceillo", "he conseguido pillarte");
+                            Log.i("traceillo", "el id pillado es v.getId :" + v.getId());
+                            editText = findViewById(R.id.jugadornombre1);
+                            if (editText.getText().toString().isEmpty()){
+                                editText.setText(jugador);
+                            }else {
+                                jugador = editText.getText().toString();
+                            }
+                            Intent intent = new Intent(MainActivityprevio.this, MainActivity.class);
+                            intent.putExtra("rotadevuelta",rotada);
+                            int desdeMainActivityprevio = 1;
+                            intent.putExtra("desdeprevio",desdeMainActivityprevio);
+                            root = Environment.getExternalStorageDirectory().toString()+ "/Pictures/COLORES_PIC.JPEG";
+                            intent.putExtra("fotoinicio",root);
+                            sinAvatarString = "false";
+                            if (sinAvatar){
+                                sinAvatarString = "true";
+                            }
+                            intent.putExtra("avatardesdeResultados",sinAvatarString);
+                            intent.putExtra("nombre",jugador);
+                            startActivity(intent);
+                            finish();
+
+                        }
+                        //            marcarColor(v);
+                    }
+                });
+
+                //      crearimagen(x);
+                recorrerLayoutsycolorear(vistahija);
+
+            }
+
         }
-        setContentView(R.layout.activity_main);
-        LinearLayout l1 = findViewById(R.id.root1);
-        l1.setVisibility(View.VISIBLE);
-        editText = findViewById(R.id.jugadornombre);
-        editText.setVisibility(View.INVISIBLE);
+
+    }
+
+
+    private int newId() {
+        int resultado = -1;
+        do {
+            resultado = r.nextInt(Integer.MAX_VALUE);
+        } while (findViewById(resultado) != null);
+        return resultado;
+    }
+    private LinearLayout crearimagen(int orientacion) {
+        LinearLayout nueva_caja = null;
+        LinearLayout.LayoutParams parametros = null;
+        nueva_caja = new LinearLayout(this);
+        nueva_caja.setId(newId());
+        int id_creado = nueva_caja.getId();
+        Log.i("MIAPP", "SplitViewCopia -crearHijo- , getid creado es :" + id_creado);
+
+
+            nueva_caja.setOrientation(LinearLayout.HORIZONTAL);
+        //    parametros = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1F);
+            parametros = new LinearLayout.LayoutParams(ImageView.MEASURED_SIZE_MASK, (int) 1F,1F);
+
+        nueva_caja.setLayoutParams(parametros);
+        nueva_caja.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+    //            dividir(v);
+            }
+        });
+        nueva_caja.setBackgroundColor(randomColor());
+        nueva_caja.setVisibility(View.VISIBLE);
+
+        return nueva_caja;
+    }
+
+    public void Proseguir(View view) {
+        avatarJugador.setVisibility(View.INVISIBLE);
+        TextView tv = (TextView) findViewById(R.id.titulo);
+        tv.setVisibility(View.INVISIBLE);
         Button button = findViewById(R.id.continuarsi);
         button.setVisibility(View.INVISIBLE);
-        // DEFINO NUMBERPICKER - PARA TOQUES Y NUMERO DE CAJAS POR CLICK
-        numberPicker = findViewById(R.id.edit_toques);
-        numberPicker1 = findViewById(R.id.edit_cajas);
-        //      DEFINO RANGO DE VALORES
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(3);
-        numberPicker.setDisplayedValues( new String[] { "FACIL", "DIFICIL", "MUY DIFICIL" } );
-        numberPicker.setValue(1); // valor por defecto
-        numberPicker1.setMinValue(2);
-        numberPicker1.setMaxValue(10);
-        numberPicker1.setValue(3); // valor por defecto
-        //      EJECUTO EL NUMBERPICKER
-        numberPicker.setOnValueChangedListener(onValueChangeListener);
-        numberPicker1.setOnValueChangedListener(onValueChangeListener1);
+        editText = findViewById(R.id.jugadornombre1);
+        editText.setVisibility(View.INVISIBLE);
+
+        vista = findViewById(R.id.root2);
+ //       recorrerLayouts(vista);
+        animUnit1 = 1100;
+        if (sinAvatar == true){
+            animUnit1 = 500;
+        }
+
+
+            Log.i("traceillo","valor j es :"+animUnit1);
+            changeTextColor1(vista, 1, 0, 10000, animUnit1);
+
+
+
+ //       setContentView(R.layout.activity_main);
+ //       LinearLayout l1 = findViewById(R.id.root1);
+ //       l1.setVisibility(View.VISIBLE);
+
+
     }
 
     NumberPicker.OnValueChangeListener onValueChangeListener = new NumberPicker.OnValueChangeListener() {
@@ -220,7 +422,8 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void Proseguir1(View view) {
-        Intent intent = new Intent(MainActivity.this, SplitViewCopia.class);
+
+        Intent intent = new Intent(MainActivityprevio.this, SplitViewCopia.class);
        // intent.putExtra("toques", numberPicker.getValue());
         intent.putExtra("toques",20);
         intent.putExtra("cajas", numberPicker1.getValue());
@@ -234,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("nivel",nivel);
         intent.putExtra("originaluri",original_photo_galery_uriString);
 
-        MainActivity.this.finish();
+        MainActivityprevio.this.finish();
         startActivity(intent);
     }
 
@@ -274,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
                         escribeNombreJugador();
                         sinAvatar = true;
                         avatarJugador = findViewById(R.id.foto);
-                        avatarJugador.setImageResource(R.drawable.picture);
+                        avatarJugador.setImageResource(picture);
                         // esto hace falta si anteriormente se opto por la opcion tomar foto o desde album
                         // en algunos cosos como la imagen fue rotada el drawable.picture aparece rotado.
                         // si asignamos setRotation con el ultimo valor almacenado en rotda se solventa el problema
@@ -291,6 +494,7 @@ public class MainActivity extends AppCompatActivity {
     //    setContentView(R.layout.activity_inicial_colores);
    //     ImageView i = findViewById(R.id.foto);
    //     i.setVisibility(View.VISIBLE);
+
         EditText editText1 = findViewById(R.id.jugadornombre1);
         editText1.setVisibility(View.VISIBLE);
         Button button = findViewById(R.id.continuarsi);
@@ -339,7 +543,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveImagetoExternalmemory(Bitmap image) {
-        String root = Utilidades.crearNombreArchivo();
+        root = Utilidades.crearNombreArchivo();
         //String root = Environment.getExternalStorageDirectory().toString();
         //File file = new File(root + "/Pictures/COLORES_PIC.jpg");
         Log.i("MIAPP","MainActivity-saveImagetoExternal path es : "+root);
@@ -430,7 +634,7 @@ public class MainActivity extends AppCompatActivity {
         if (bitmap != null) {
             // previamente cargada - no hacer nada
         } else {
-            avatarJugador.setImageResource(R.drawable.picture);
+            avatarJugador.setImageResource(picture);
         }
     }
 
@@ -534,7 +738,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i("MIAPP", "Quiere seleccionar una foto");
         Intent intent_pide_foto = new Intent(
                 Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         );
         intent_pide_foto.setType("image/*");//tipo mime
         startActivityForResult(intent_pide_foto, CODIGO_PETICION_SELECCIONAR_FOTO);
@@ -571,6 +775,104 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return rotate;
+    }
+
+
+    public void recorrerLayouts(View vista) {
+        // Log.d(getClass().getCanonicalName(), vista.getClass().getCanonicalName());
+        if (vista instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) vista;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                View vistahija = viewGroup.getChildAt(i);
+                vistahija.setClickable(false);
+                vistahija.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        marcarColor(v);
+                    }
+                });
+                recorrerLayouts(vistahija);
+            }
+        }
+    }
+    public void marcarColor(View view) {
+        // Si ya se ha pulsado el Boton Inicio entonces --true
+        // eso quiere decir que empezamos a poder cambiar cajas de colores
+        //id = view.findViewById(R.id.bloque1);
+        LinearLayout x = (LinearLayout) view;
+        Log.i("MIAPP", "SplitViewCopia--marcarColor(view) -inicio es : " + inicio);
+        if (inicio == true) {
+
+            // NIVEL DIFICIL o MUY DIFICIL
+            int nivelnumero = Integer.parseInt(nivel);
+            if (nivelnumero == 3){
+                randNum = rand.nextInt(3) + 0; //MUY DIFICIL
+            }else {
+                if (nivelnumero == 2){
+                    randNum = rand.nextInt(2) + 0; // DIFICIL
+                }else {
+                    randNum = 0;    // FACIL
+                }
+            }
+            Log.i("MIAPP","randNum es: "+randNum);
+            if (ids.size() == 0) {
+
+                if (randNum == 0) { // Cambiar a NEGRO
+                    ids.add(x.getId());
+                    num_veces = num_veces + 1;
+                    Log.i("MIAPP","randNum (num_veces) es: "+num_veces);
+                    bloqueclick = false;    // poner en negro
+                }// ha cambiado a color randon
+                else {
+                    bloqueclick = true;
+                }
+            } else {
+                if (randNum == 0) {
+                    int temporal = num_veces;
+                    for (int i = 0; i <= ids.size() - 1; i++) {
+                        if (ids.get(i) == x.getId()) {
+                            num_veces = num_veces - 1;
+                            Log.i("MIAPP", "randNum (num_veces) es: " + num_veces);
+                            ids.remove(i);
+                            bloqueclick = true;  // poner en blanco
+                            break;
+                        }
+                    }
+                    if (temporal == num_veces) {
+                        ids.add(x.getId());
+                        num_veces = num_veces + 1;
+                        Log.i("MIAPP", "randNum (num_veces) es: " + num_veces);
+                        bloqueclick = false;    // poner en negro
+                    } else {
+                        //no hay que hacer nada ya estaba y se ha quitado
+                    }
+                }
+            }
+            Log.i("MIAPP", "SplitViewCopia--marcarColor(view)-array momentaneo ids es: " + ids);
+            Log.i("MIAPP", "SplitViewCopia--marcarColor(view)-el linear pulsado es " + x.getId());
+            if (bloqueclick == false) {
+                //view.setBackgroundColor(Color.red(100000));
+                view.setBackgroundColor(getResources().getColor(R.color.negro));
+                bloqueclick = true;
+                Log.i("MIAPP", "SplitViewCopia--marcarColor(view)-numero de veces " + num_veces);
+                if (num_veces == numerodeCajas) {
+                    // ahora tiene que preguntar si quieres jugar otra vez y si debe
+                    // mostrarte el tiempo actual y el record ( si hay nuevo lo indicara)
+   //                 otraVez();
+                }
+            } else {
+                // NIVEL DIFICIL
+                view.setBackgroundColor(randomColor());
+                //view.setBackgroundColor(getResources().getColor(R.color.blanco));
+                if (nivelnumero == 1){
+                    bloqueclick = false;    // FACIL
+                }
+                Log.i("MIAPP", "SplitViewCopia--marcarColor(view)-numero de veces " + num_veces);
+            }
+
+        } else {
+            // No hay que hacer nada aun . Esperar a que el boton INICIAR se presione
+        }
+        //view.setOnClickListener(new View.OnClickListener() {public void onClick(View v) { marcarColor(v); }});
     }
 
 };

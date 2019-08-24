@@ -91,8 +91,29 @@ public class VisualizacionRecord extends AppCompatActivity {
                 // activity_visualizacion_record
                 TextView txtnivel = findViewById(R.id.nivel);
                 // vamos a escribir - NIVEL + (numero Nivel)nivel
-                String textonivel = "JUEGO -CAJAS"+numerodeCajas+" - NIVEL " + nivel;
-                txtnivel.setText(textonivel);
+                String textonivelString = "FACIL";
+                if (nivel.contains("1")){
+                }else {
+                    if (nivel.contains("2")){
+                        textonivelString = "DIFICIL";
+                    }else {
+                        if (nivel.contains("3")){
+                            textonivelString = "MUY DIFICIL";
+                        }
+                    }
+                }
+
+                String textonivel;
+                String textonivel1;
+                textonivel1 = textonivelString;
+                if (numerodeCajas<10){
+                    textonivel = "CAJAS0"+numerodeCajas+" - NIVEL ";
+                }else {
+                    textonivel = "CAJAS" + numerodeCajas + " - NIVEL ";
+                }
+
+                txtnivel.setText(textonivel+"\n" + textonivel1);
+                txtnivel.setTextSize(15);
                 TextView txtjugador = findViewById(R.id.nombrejugador);
                 String textjugador = "JUGADOR : " + jugadorRecord;
                 txtjugador.setText(textjugador);
@@ -108,17 +129,22 @@ public class VisualizacionRecord extends AppCompatActivity {
                 // activity_visualizacion_record
                 TextView txtnivel = findViewById(R.id.nivel);
                 // vamos a escribir - NIVEL + (numero Nivel)nivel
+                String textonivelString = "FACIL";
                 if (nivel.contains("1")) {
-                    nivel = "FACIL";
                 }
                 if (nivel.contains("2")) {
                     nivel = "DIFICIL";
                 }
                 if (nivel.contains("3")) {
-                    nivel = "MUY DIFICIL";
+                    textonivelString = "MUY DIFICIL";
                 }
-                String textonivel = "JUEGO CAJAS"+numerodeCajas+ "-NIVEL " + nivel;
-                txtnivel.setText(textonivel);
+                String textonivel;
+                if (numerodeCajas<10){
+                    textonivel = "CAJAS0"+numerodeCajas;
+                }else {
+                    textonivel = "CAJAS" + numerodeCajas;
+                }
+                txtnivel.setText(textonivel+"\n"+textonivelString);
                 txtnivel.setBackgroundColor(Color.RED);
 
                 TextView txtjugadorytiemporecord = findViewById(R.id.tiemporecord);
@@ -142,7 +168,13 @@ public class VisualizacionRecord extends AppCompatActivity {
             setContentView(R.layout.activity_visualizacion_record);
             //HAY RECORD TENGO QUE MOSTRAR PANTALLA DE NUEVO RECORD
             TextView titulo = findViewById(R.id.nuevorecord);
-            titulo.setText("EL RECORD ACTUAL PARA "+"JUEGO -CAJAS"+ numerodeCajas);
+            String textonivel;
+            if (numerodeCajas<10){
+                textonivel = "CAJAS0"+numerodeCajas;
+            }else {
+                textonivel = "CAJAS" + numerodeCajas;
+            }
+            titulo.setText("EL RECORD ACTUAL \n"+textonivel);
             // activity_visualizacion_record
             TextView txtnivel = findViewById(R.id.nivel);
             // vamos a escribir - NIVEL + (numero Nivel)nivel
@@ -155,8 +187,12 @@ public class VisualizacionRecord extends AppCompatActivity {
             if (nivel.contains("3")) {
                 nivel = "MUY DIFICIL";
             }
-            String textonivel = "NIVEL " + nivel;
-            txtnivel.setText(textonivel);
+            String textonivel1;
+
+            textonivel1 = " - NIVEL "+ nivel +" -";
+
+
+            txtnivel.setText(textonivel1);
         //    txtnivel.setBackgroundColor(R.color.aguamarina);
             TextView txtjugador = findViewById(R.id.nombrejugador);
             String textjugador = "JUGADOR : " + jugadorRecord;
@@ -199,7 +235,7 @@ public class VisualizacionRecord extends AppCompatActivity {
             imagen = findViewById(R.id.imagen);
             imagenrecord = findViewById(R.id.imagenpuntos);
             //IMAGEN DEL RECORD
-            if (sinAvatar.contains("true")) {
+            if (avatatarrecord.contains("true")) {
                 imagenrecord.setImageResource(R.drawable.picture);
             } else {
                 Bitmap recuperaImagen = Utilidades.recuperarImagenMemoriaInterna(imagenrecord.getContext(), imagenrecordantiguo);//dato1 no se usa

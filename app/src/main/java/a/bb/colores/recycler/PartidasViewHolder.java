@@ -1,5 +1,6 @@
 package a.bb.colores.recycler;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -7,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +39,9 @@ public class PartidasViewHolder extends RecyclerView.ViewHolder {
     private TextView text_view_jugador;
     private TextView text_view_tiempo;
     private Context getcontext;
+    private ImageView facil1;
+    private ImageView dificil1;
+    private ImageView muydificil1;
     File file;
     String root;
     int rotada;
@@ -48,6 +53,9 @@ public class PartidasViewHolder extends RecyclerView.ViewHolder {
         text_view_juego = (TextView)itemView.findViewById(R.id.juego);
         text_view_jugador = (TextView)itemView.findViewById(R.id.jugador);
         text_view_tiempo = (TextView)itemView.findViewById(R.id.tiempo);
+        facil1 = itemView.findViewById(R.id.facil);
+        dificil1 = itemView.findViewById(R.id.dificil);
+        muydificil1 = itemView.findViewById(R.id.muydificil);
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
@@ -118,11 +126,36 @@ public class PartidasViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     public void cargarPartidasEnHolder(Partida l) {
 
 
         String p = l.getSinAvatar().toString();
+        String color = "azul";
         Log.i("MIAPP","PartidasViewHolder-cargarPartidasEnHolder- sinAvatar es :"+p);
+        if (l.getNivel().toString().contains("1")){
+            // dejar color azul
+            facil1.setVisibility(View.VISIBLE);
+            dificil1.setVisibility(View.INVISIBLE);
+            muydificil1.setVisibility(View.INVISIBLE);
+
+        }else {
+            if (l.getNivel().toString().contains("2")){
+                // dejar color verde
+                facil1.setVisibility(View.INVISIBLE);
+                dificil1.setVisibility(View.VISIBLE);
+                muydificil1.setVisibility(View.INVISIBLE);
+                color = "verde";
+            }else {
+                if (l.getNivel().toString().contains("3")){
+                    // dejar color negro
+                    facil1.setVisibility(View.INVISIBLE);
+                    dificil1.setVisibility(View.INVISIBLE);
+                    muydificil1.setVisibility(View.VISIBLE);
+                    color = "negro";
+                }
+            }
+        }
 
         if (p.toString().contains("true")){
             avatar_foto.setImageResource(R.drawable.picture);
@@ -165,5 +198,21 @@ public class PartidasViewHolder extends RecyclerView.ViewHolder {
         text_view_juego.setText("Cajas_"+l.getJuego());
         text_view_jugador.setText(l.getJugador());
         text_view_tiempo.setText(l.getTiempo());
+        if (color.contains("azul")){
+            text_view_juego.setTextColor(0xff3F51B5);
+            text_view_jugador.setTextColor(0xff3F51B5);
+            text_view_tiempo.setTextColor(0xff3F51B5);
+        }else {
+            if (color.contains("verde")) {
+                text_view_juego.setTextColor(0xff287233);
+                text_view_jugador.setTextColor(0xff287233);
+                text_view_tiempo.setTextColor(0xff287233);
+            }else {
+                text_view_juego.setTextColor(0xff000000);
+                text_view_jugador.setTextColor(0xff000000);
+                text_view_tiempo.setTextColor(0xff000000);
+            }
+        }
+
     }
 }

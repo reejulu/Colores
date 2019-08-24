@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/rojo"
             android:textStyle="bold"
-            android:text="NIVEL BASICO"/>
+            android:text="NIVEL FACIL"/>
 
         <RadioGroup
             android:layout_width="match_parent"
@@ -40,25 +40,32 @@
                 android:id="@+id/nivelBasico"
                 android:layout_width="0dp"
                 android:layout_weight="1.1"
+                android:buttonTint="@color/azul"
                 android:layout_height="wrap_content"
-                android:text="Basico" />
+                android:text="Facil"
+                android:textColor="@color/azul"/>
 
             <RadioButton
                 android:id="@+id/nivelDificil"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:buttonTint="@color/verdeEsmeralda"
                 android:layout_height="wrap_content"
-                android:text="Dificil" />
+                android:text="Dificil"
+                android:textColor="@color/verdeEsmeralda"/>
             <RadioButton
                 android:id="@+id/nivelMuyDificil"
                 android:layout_width="0dp"
                 android:layout_weight="1.5"
+                android:buttonTint="@color/black"
                 android:layout_height="wrap_content"
                 android:text="Muy Dificil" />
             <RadioButton
                 android:id="@+id/nivelTodos"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:buttonTint="@color/rojo"
+                android:textColor="@color/rojo"
                 android:layout_height="wrap_content"
                 android:text="Todos" />
 

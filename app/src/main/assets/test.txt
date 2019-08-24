@@ -1,0 +1,32 @@
+C:\Program Files\Java\jdk1.8.0_161\bin>keytool -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androiddebugkey -storepass 
+android -keypass android
+
+Nombre de Alias: androiddebugkey
+Fecha de Creación: 01-mar-2018
+Tipo de Entrada: PrivateKeyEntry
+Longitud de la Cadena de Certificado: 1
+Certificado[1]:
+Propietario: C=US, O=Android, CN=Android Debug
+Emisor: C=US, O=Android, CN=Android Debug
+Número de serie: 1
+Válido desde: Thu Mar 01 20:25:10 CET 2018 hasta: Sat Feb 22 20:25:10 CET 2048
+Huellas digitales del certificado:
+         MD5: 0C:60:6A:DF:FA:73:5A:D8:C4:F4:08:FB:71:0E:96:D3
+         SHA1: 91:F7:D5:F7:AE:87:95:20:CC:C7:AA:F2:C6:49:F4:DB:0B:90:02:8E
+         SHA256: D9:2C:36:0B:D3:32:FB:6B:53:3C:34:E5:08:5E:56:7D:D9:06:E5:47:AD:47:CD:C3:8A:B5:8D:E3:0D:59:95:89
+Nombre del algoritmo de firma: SHA1withRSA
+Algoritmo de clave pública de asunto: Clave RSA de 1024 bits
+Versión: 1
+
+Warning:
+El almacén de claves JKS utiliza un formato propietario. Se recomienda migrar a PKCS12, que es un formato estándar del sector que utiliza 
+"keytool -importkeystore -srckeystore C:\Users\juan luis\.android\debug.keystore -destkeystore 
+C:\Users\juan luis\.android\debug.keystore -deststoretype pkcs12".
+
+
+...
+Despues de crearlo
+..
+
+Here is your Client ID
+394104241604-mjf7u8ebpt59r5sobcikc1f8vfqgb385.apps.googleusercontent.com

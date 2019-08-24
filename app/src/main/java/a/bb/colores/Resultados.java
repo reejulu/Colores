@@ -63,91 +63,6 @@ public class Resultados extends AppCompatActivity {
         // Jugador,tiempo , Juego, record?
         filtartodaspartidas(nivel);
         mostrarrecycler("record",nivel);
-        //filtarparidasrecords();
-        //presentarEnRecycler("xx");
-
-
-        /*
-        // *****************esta parte la voy a anular de momento***************************
-        // PREPARO OTRA NUEVA VISTA PARA PODER ELEGIR ENTRE : TODAS LAS PARTIDAS Y RECORD POR JUEGO
-        //  -TODAS LAS PARTIDAS- han sido anteriormente almacenadas en datos
-        //  -RECORD POR JUEGO - hay que generarlo
-
-
-        final Spinner spinner = (Spinner) findViewById(R.id.mispinner);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, NOMBRES);
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinnerArrayAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.i("MIAPP","la posicion selecciona es : " +i);
-                String juego = (String) spinner.getAdapter().getItem(i);
-
-                    //   String NOMBRES [] = {"Todos","Jugador","Juego-Record", "Juego"};
-                    switch (juego) {
-                        case "Elige opcion":
-                            break;
-                        case "Resultados": // Mostrar datos en el recycler
-                            mostrarrecycler();
-                            break;
-                        case "Records": // nuevo para probar records solamente
-                            ordenar1(view,1);
-                            break;
-                        default:    // "Elegir"
-                            break;
-                    }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-
-
-        TextView texto = findViewById(R.id.txtresultados);
-        //para imprimir un array en un text view
-
-      //  Collections.sort(arrayDataLog, new Sortbyroll());
-        /**
-        Collections.sort(this.arrayDataLog, new Comparator<String>() {
-            @Override
-            public int compare(String s, String t1) {
-               String [] m = s.split(",");
-                String [] m1 = t1.split(",");
-                Double md = Double.parseDouble(m[1]);
-                Double m1d = Double.parseDouble(m1[1]);
-
-                Log.i("MIAPP","muestar s es: "+s);
-                return new Integer(md.compareTo(m1d));
-            }
-        });
-
-        int size = arrayDataLog.size()-1;
-        Collections.sort(arrayDataLog);
-        int w = arrayDataLog.size()-1;
-        for (int x = w; x >-1;x--){
-            String data = arrayDataLog.get(x).toString();
-            String [] campos = data.split(",");
-            jugador = campos[0];
-            tiempo = campos[1];
-            juego = campos[2];
-            record = campos[3];
-
-        }
-
-
-        //Collections.sort(arrayDataLog,Collections.<String>reverseOrder());
-
-        texto.setText("");
-
-        int z = arrayDataLog.size();
-           for(int i = 0; i < z; i++) {
-            texto.append(arrayDataLog.get(i));
-        }
-        */
 
     }
     private static Boolean getinfo(){
@@ -211,72 +126,6 @@ public class Resultados extends AppCompatActivity {
 
 
 
-    public void filtar(int menu){
-        // "Todos","Jugador","Juego-Record", "Juego"}
-        // menu 0,   1      ,   2           ,   3
-        Log.i("MIAPP","arrayDataLog (antes de filtrar) es: " +arrayDataLog);
-        int size = arrayDataLog.size()-1;
-        //Collections.sort(arrayDataLog);
-        int w = arrayDataLog.size()-1;
-        TextView texto = findViewById(R.id.txtresultados);
-        String menusalida = ""+"\n";
-        texto.setText(menusalida);
-        juegoset = false;
-       // texto.setText(Texto+"\n"+Texto2+"\n"+Texto3+"\n"+Texto4);
-        for (int x = w; x >-1;x--){
-            String data = arrayDataLog.get(x).toString();
-            String [] campos = data.split(",");
-            jugador = campos[0];
-            tiempo = campos[1];
-            juego = campos[2];
-            record = campos[3];
-            switch (menu) {
-
-
-
-                case 0: // nuevo para probar recycler
-                    mostrarrecycler("record",nivel);
-                    break;
-                case 1: // Juego-Record
-
-                    View view = null;
-                    ordenar1(view,1);
-                    break;
-                default:
-            }
-
-        }
-        // en este momento arrayDataLogtemp tiene la lista de los marcados con yes.
-        // hay que dejar solo el primero encontrado de diferente juego .
-        int v = arrayDataLogtemp.size();
-        if (v > 0) {
-            texto.setMovementMethod(new ScrollingMovementMethod());
-            texto.append("   Mejores Tiempos por Juego  \n");
-            for (w = v-1; w > -1; w--) {
-                String data = arrayDataLogtemp.get(w).toString();
-                String[] campos = data.split(",");
-                jugador = campos[0];
-                tiempo = campos[1];
-                juego = campos[2];
-                record = campos[3];
-                menusalida = "Jugador: " + jugador + ",Juego_" + juego + ",tiempo: " + tiempo + " Seg. " + record;
-                if (w == v-1) {
-                    texto.append("    "+menusalida);
-                    juegotmp = juego;
-                } else {
-                    if (data.toString().contains("," + juegotmp +",")) {
-                        // Ya esta el record para este juego no hay que añadirlo
-                    } else {
-                        // añadir el record para este juego
-                        texto.append(menusalida);
-                        juegotmp = juego;
-                    }
-                }
-            }
-        }
-        arrayDataLogtemp.clear();
-    }
-
 
     public void mostrarrecycler(String value,String nivelapresentar){
         setContentView(R.layout.activity_resultado_recycler);
@@ -287,7 +136,7 @@ public class Resultados extends AppCompatActivity {
         RadioButton rbd = findViewById(R.id.nivelDificil);
         RadioButton rbmd = findViewById(R.id.nivelMuyDificil);
         RadioButton rbtodos = findViewById(R.id.nivelTodos);
-        String nivelstring = "BASICO";
+        String nivelstring = "FACIL";
         if (nivelapresentar.contains("1")){
             rbb.setChecked(true);
 
@@ -491,41 +340,8 @@ public class Resultados extends AppCompatActivity {
                     break;
                 default:break;
             }
-            /*
-            if (ii.contains("juego")) {
-
-            } else {
-                if (ii.contains("jugador")) {
-                    string = "nombre";
-                } else {
-                    // ordernar por tiempo
-                    string = "tiempo";
-                }
-            }
-            //CONSULTO LA TABLA DE RECORD Y OBTENGO LA LISTA JUEGOS - RECORD
-            listajuegos = (ArrayList<Puntuacion>) baseDatosPuntuaciones.listatodaspartidas(string);
-            */
         }
-        /*
 
-        for (int i = 0; i < listajuegos.size(); i++) {
-            String jugador = listajuegos.get(i).getNombre();
-            String juego = listajuegos.get(i).getJuego();
-            String tiempo = listajuegos.get(i).getTiempo();
-            partida_aux = new Partida(jugador, juego, tiempo);
-            datos.add(partida_aux);
-        }
-        setContentView(R.layout.activity_resultado_recycler);
-        recView = (RecyclerView) findViewById(R.id.RecView);
-        //recView.setHasFixedSize(true);//opcional, si sé que el tamaño no va a cambiar
-
-        adaptador = new AdapterPartidas(datos);
-
-
-        recView.setAdapter(adaptador);
-
-        recView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        */
     }
 
     /**
@@ -618,7 +434,7 @@ public void presentarEnRecycler(String string,String nivelamostrar){
     RadioButton rbd = findViewById(R.id.nivelDificil);
     RadioButton rbmd = findViewById(R.id.nivelMuyDificil);
     RadioButton rbtodos = findViewById(R.id.nivelTodos);
-    String nivelstring = "BASICO";
+    String nivelstring = "FACIL";
     if (nivelamostrar.contains("1")){
         rbb.setChecked(true);
     }else if (nivelamostrar.contains("2")){
