@@ -389,7 +389,7 @@
             android:layout_width="match_parent"
             android:layout_height="280dp"
             android:onClick="personalizarFoto"
-            android:src="@drawable/picture" />
+            android:src="@drawable/dora1" />
         <EditText
             android:id="@+id/jugadornombre1"
             android:layout_width="wrap_content"

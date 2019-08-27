@@ -67,8 +67,10 @@ public class Resultados extends AppCompatActivity {
     }
     private static Boolean getinfo(){
         boolean p = false;
-        if (sinAvatar=="true"){
-            p= true;
+        if (sinAvatar=="false"){
+            p= false;
+        }else {
+            p = true;
         }
         return p;
     }

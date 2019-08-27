@@ -143,11 +143,37 @@ public class DetalleJugador extends AppCompatActivity {
 
     }
 
+    public void traduciravatar(String avatar){
+
+        switch (avatar) {
+            case "dora1":
+                avatar_foto.setImageResource(R.drawable.dora1);
+                break;
+            case "dora2":
+                avatar_foto.setImageResource(R.drawable.dora2);
+                break;
+            case "dora3":
+                avatar_foto.setImageResource(R.drawable.dora3);
+                break;
+            case "dora4":
+                avatar_foto.setImageResource(R.drawable.dora4);
+                break;
+            case "dora5":
+                avatar_foto.setImageResource(R.drawable.dora5);
+            case "dora6":
+                avatar_foto.setImageResource(R.drawable.dora6);
+                break;
+            default:
+                avatar_foto.setImageResource(R.drawable.picture);
+                break;
+        }
+    }
 
     public void leerimagen(String jugadorelegido, String juegoelegido, String tiempoelegido, String sinAvatar){
         avatar_foto = (ImageView)findViewById(R.id.foto);
-        if (sinAvatar.toString().contains("true")){
-            avatar_foto.setImageResource(R.drawable.picture);
+        if (!sinAvatar.toString().contains("false")){
+            traduciravatar(sinAvatar);
+       //     avatar_foto.setImageResource(R.drawable.picture);
         }else {
             Uri uri = null;
             String fotoArchivada = jugadorelegido.toString() + juegoelegido.toString() + tiempoelegido.toString();
@@ -294,7 +320,8 @@ public class DetalleJugador extends AppCompatActivity {
                 avatar_foto.setRotation(rotadaint);
                 origen = "hay foto";
             } else {
-                avatar_foto.setImageResource(R.drawable.picture);
+                traduciravatar(sinAvatar);
+              //  avatar_foto.setImageResource(R.drawable.picture);
             }
             click = 1;
         }else{

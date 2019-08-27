@@ -157,8 +157,9 @@ public class PartidasViewHolder extends RecyclerView.ViewHolder {
             }
         }
 
-        if (p.toString().contains("true")){
-            avatar_foto.setImageResource(R.drawable.picture);
+        if (!p.toString().contains("false")){
+            traduciravatar(p.toString());
+         //   avatar_foto.setImageResource(R.drawable.picture);
         }else {
             String fotoArchivada = l.getJugador().toString() + l.getJuego().toString() + l.getTiempo().toString();
             String rotadaString = l.getRotada().toString();
@@ -191,7 +192,7 @@ public class PartidasViewHolder extends RecyclerView.ViewHolder {
                 //avatar_foto.setImageResource(R.drawable.jugarahora);
    //             int i = randomColor();
                 // avatar_foto.setColorFilter(i);
-                avatar_foto.setImageResource(R.drawable.picture);
+    //            avatar_foto.setImageResource(R.drawable.picture);
 
             }
         }
@@ -214,5 +215,30 @@ public class PartidasViewHolder extends RecyclerView.ViewHolder {
             }
         }
 
+    }
+    public void traduciravatar(String avatar){
+
+        switch (avatar) {
+            case "dora1":
+                avatar_foto.setImageResource(R.drawable.dora1);
+                break;
+            case "dora2":
+                avatar_foto.setImageResource(R.drawable.dora2);
+                break;
+            case "dora3":
+                avatar_foto.setImageResource(R.drawable.dora3);
+                break;
+            case "dora4":
+                avatar_foto.setImageResource(R.drawable.dora4);
+                break;
+            case "dora5":
+                avatar_foto.setImageResource(R.drawable.dora5);
+            case "dora6":
+                avatar_foto.setImageResource(R.drawable.dora6);
+                break;
+            default:
+                avatar_foto.setImageResource(R.drawable.dora1);
+                break;
+        }
     }
 }

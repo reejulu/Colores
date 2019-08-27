@@ -235,8 +235,9 @@ public class VisualizacionRecord extends AppCompatActivity {
             imagen = findViewById(R.id.imagen);
             imagenrecord = findViewById(R.id.imagenpuntos);
             //IMAGEN DEL RECORD
-            if (avatatarrecord.contains("true")) {
-                imagenrecord.setImageResource(R.drawable.picture);
+            if (!avatatarrecord.contains("false")) {
+                traduciravatar1(avatatarrecord);
+             //   imagenrecord.setImageResource(R.drawable.picture);
             } else {
                 Bitmap recuperaImagen = Utilidades.recuperarImagenMemoriaInterna(imagenrecord.getContext(), imagenrecordantiguo);//dato1 no se usa
                 imagenrecord.setImageBitmap(recuperaImagen);
@@ -249,8 +250,9 @@ public class VisualizacionRecord extends AppCompatActivity {
 
             }
             //IMAGEN DE LA PARTIDA ACTUAL
-            if (sinAvatar.contains("true")) {
-                imagen.setImageResource(R.drawable.picture);
+            if (!sinAvatar.contains("false")) {
+                traduciravatar(sinAvatar);
+        //        imagen.setImageResource(R.drawable.picture);
             } else {
                 Bitmap recuperaImagen = Utilidades.recuperarImagenMemoriaInterna(imagen.getContext(), nombreArchivo);//dato1 no se usa
                 imagen.setImageBitmap(recuperaImagen);
@@ -265,8 +267,9 @@ public class VisualizacionRecord extends AppCompatActivity {
             //recordjuego
             imagen = findViewById(R.id.imagen);
             //IMAGEN DEL RECORD
-            if (avatatarrecord.contains("true")) {
-                imagen.setImageResource(R.drawable.picture);
+            if (!avatatarrecord.contains("false")) {
+                traduciravatar(avatatarrecord);
+            //    imagen.setImageResource(R.drawable.picture);
             } else {
                 Bitmap recuperaImagen = Utilidades.recuperarImagenMemoriaInterna(imagen.getContext(), nombreArchivo);//dato1 no se usa
                 imagen.setImageBitmap(recuperaImagen);
@@ -277,6 +280,63 @@ public class VisualizacionRecord extends AppCompatActivity {
             }
         }
     }
+
+    public void traduciravatar(String avatar){
+
+        switch (avatar) {
+            case "dora1":
+                imagen.setImageResource(R.drawable.dora1);
+                break;
+            case "dora2":
+                imagen.setImageResource(R.drawable.dora2);
+                break;
+            case "dora3":
+                imagen.setImageResource(R.drawable.dora3);
+                break;
+            case "dora4":
+                imagen.setImageResource(R.drawable.dora4);
+                break;
+            case "dora5":
+                imagen.setImageResource(R.drawable.dora5);
+            case "dora6":
+                imagen.setImageResource(R.drawable.dora6);
+                break;
+            default:
+                imagen.setImageResource(R.drawable.dora1);
+                break;
+        }
+
+
+    }
+
+    public void traduciravatar1(String avatar){
+
+        switch (avatar) {
+            case "dora1":
+                imagenrecord.setImageResource(R.drawable.dora1);
+                break;
+            case "dora2":
+                imagenrecord.setImageResource(R.drawable.dora2);
+                break;
+            case "dora3":
+                imagenrecord.setImageResource(R.drawable.dora3);
+                break;
+            case "dora4":
+                imagenrecord.setImageResource(R.drawable.dora4);
+                break;
+            case "dora5":
+                imagenrecord.setImageResource(R.drawable.dora5);
+            case "dora6":
+                imagenrecord.setImageResource(R.drawable.dora6);
+                break;
+            default:
+                imagenrecord.setImageResource(R.drawable.dora1);
+                break;
+        }
+
+
+    }
+
     public void continuar(View view) {
         SplitViewCopia.setVar1(1);
         finish();

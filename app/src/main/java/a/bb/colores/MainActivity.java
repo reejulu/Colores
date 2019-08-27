@@ -50,6 +50,14 @@ import java.io.InputStreamReader;
 import java.util.Random;
 import a.bb.colores.recycler.Partida;
 
+import static a.bb.colores.R.drawable.dora1;
+import static a.bb.colores.R.drawable.dora2;
+import static a.bb.colores.R.drawable.dora3;
+import static a.bb.colores.R.drawable.dora4;
+import static a.bb.colores.R.drawable.dora5;
+import static a.bb.colores.R.drawable.dora6;
+import static a.bb.colores.R.drawable.picture;
+
 
 public class MainActivity extends AppCompatActivity {
     NumberPicker numberPicker;
@@ -101,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
             editText.setText(jugador);
             sinAvatarString = getIntent().getStringExtra("avatardesdeResultados");
             int desdeMainActivityprevio = getIntent().getIntExtra("desdeprevio",0);
+            // CUANDO VIENE DE MainActivityprevio vale 1
             if (desdeMainActivityprevio == 1){
                 original_photo_galery_uriString = getIntent().getStringExtra("fotoinicio");
                 Button button = findViewById(R.id.continuarsi);
@@ -117,7 +126,9 @@ public class MainActivity extends AppCompatActivity {
             }else {
                 sinAvatar = true;
                 // avatar_foto.setColorFilter(i);
-                avatarJugador.setImageResource(R.drawable.picture);
+                //TODO HAY QUE RECUPER EL VALOR DE sinAvatarString y ponerlo en R.drawable.xxxx
+                traduciravatar();
+               // avatarJugador.setImageResource(R.drawable.dora1);
             }
         }
         //editText.setText(jugador);
@@ -127,6 +138,35 @@ public class MainActivity extends AppCompatActivity {
         //startColor 1 - cambiar solo background color y de todas las cajitas
  //       changeTextColor(editText, 1, 0, 100000, 1000);
         ActivityCompat.requestPermissions(this, PERMISOS, CODIGO_PETICION_PERMISOS);
+    }
+
+    public void traduciravatar(){
+
+            switch (sinAvatarString) {
+                case "dora1":
+                    avatarJugador.setImageResource(R.drawable.dora1);
+                    break;
+                case "dora2":
+                    avatarJugador.setImageResource(R.drawable.dora2);
+                    break;
+                case "dora3":
+                    avatarJugador.setImageResource(R.drawable.dora3);
+                    break;
+                case "dora4":
+                    avatarJugador.setImageResource(R.drawable.dora4);
+                    break;
+                case "dora5":
+                    avatarJugador.setImageResource(R.drawable.dora5);
+                case "dora6":
+                    avatarJugador.setImageResource(R.drawable.dora6);
+                    break;
+                default:
+                    sinAvatarString = "dora1";
+                    avatarJugador.setImageResource(dora1);
+                    break;
+            }
+
+
     }
 
 
@@ -228,6 +268,11 @@ public class MainActivity extends AppCompatActivity {
         String ruta_captura_foto = Utilidades.crearNombreArchivo();
         intent.putExtra("imagen", ruta_captura_foto);
         intent.putExtra("sinAvatar",sinAvatar);
+        //para actualizar el valor del string de sinAvatar con el valor correcto
+  //      if (sinAvatar== false){
+  //          sinAvatarString = "false";
+  //      }
+        intent.putExtra("sinAVatarSTring",sinAvatarString);
         nivel = String.valueOf(numberPicker.getValue());
         intent.putExtra("rotada",rotada);   // valor int
         Log.i("traceo","MainActivity-Proseguir1-valor rotada añadido en putExtra es : "+ rotada);
@@ -263,22 +308,39 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.foto_camara:
-                        tomarFoto();
                         sinAvatar = false;
+                        sinAvatarString = "false";
+                        tomarFoto();
                         return true;
                     case R.id.foto_galeria:
-                        seleccionarFoto();
                         sinAvatar = false;
+                        sinAvatarString = "false";
+                        seleccionarFoto();
                         return true;
                     case R.id.continuar:
                         escribeNombreJugador();
                         sinAvatar = true;
                         avatarJugador = findViewById(R.id.foto);
-                        avatarJugador.setImageResource(R.drawable.picture);
+                        // para eliminar si hay indicacion de rotacion previa
+                        if (null!=avatarJugador){
+                            avatarJugador= null;
+                            setContentView(R.layout.activity_inicial_colores);
+                            avatarJugador = findViewById(R.id.foto);
+                            traduciravatar();
+
+                            editText = findViewById(R.id.jugadornombre1);
+                            editText.setText(jugador);
+
+                            escribeNombreJugador();
+                        }else {
+                            //         avatarJugador = findViewById(R.id.foto);
+                            traduciravatar();
+                        }
+              //          avatarJugador.setImageResource(R.drawable.dora1);
                         // esto hace falta si anteriormente se opto por la opcion tomar foto o desde album
                         // en algunos cosos como la imagen fue rotada el drawable.picture aparece rotado.
                         // si asignamos setRotation con el ultimo valor almacenado en rotda se solventa el problema
-                        avatarJugador.setRotation(rotada);
+               //         avatarJugador.setRotation(rotada);
                         return true;
                 }
                 return true;
@@ -430,7 +492,7 @@ public class MainActivity extends AppCompatActivity {
         if (bitmap != null) {
             // previamente cargada - no hacer nada
         } else {
-            avatarJugador.setImageResource(R.drawable.picture);
+            avatarJugador.setImageResource(R.drawable.dora1);
         }
     }
 

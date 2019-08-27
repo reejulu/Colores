@@ -160,11 +160,13 @@ public class SplitViewCopia extends AppCompatActivity {
             //intent.putExtra("imagen",photo_uri);
             ruta_captura_foto = getIntent().getStringExtra("imagen");
             sinAvatarbolean = getIntent().getBooleanExtra("sinAvatar", false);
+            sinAvatar = getIntent().getStringExtra("sinAVatarSTring");
             nivel = getIntent().getStringExtra("nivel");
             rotada = getIntent().getIntExtra("rotada",0);  // por defecto no hay rotacion de imagen
             original_photo_galery_uri =getIntent().getStringExtra("originaluri");
             if (sinAvatarbolean == true) {
-                sinAvatar = "true";
+                //TODO HAY QUE AÑADIR EL VALOR DEL NOMBRE DE LA IMAGEN i.e sinAvatar = "picture"
+               // sinAvatar = "true"; // ya vine con el string de la imagen seleccionada
             }
             uri_destino = null;
             file = new File(ruta_captura_foto);
