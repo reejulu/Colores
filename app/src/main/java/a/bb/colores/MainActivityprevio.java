@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -89,6 +90,7 @@ public class MainActivityprevio extends AppCompatActivity {
     double record = 0;
     private static final String RECORD = "RecordPartidaAnterior";
     private static final String CLAVE = "RecordPartidaAnteriorClave";
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -509,16 +511,22 @@ public class MainActivityprevio extends AppCompatActivity {
                                         int r = (int) record;
                                         if (r==0){
                                             record = t1Duraciont1Startt1Pause;
+                                            mediaPlayer = MediaPlayer.create(MainActivityprevio.this, R.raw.hechobien);
                                             Toast.makeText(MainActivityprevio.this, "nuevo record de " + record + " segundos", Toast.LENGTH_SHORT).show();
                                         }else {
                                             if (t1 < r) {
                                                 record = t1Duraciont1Startt1Pause;
+                                                mediaPlayer = MediaPlayer.create(MainActivityprevio.this, R.raw.hechobien);
                                                 Toast.makeText(MainActivityprevio.this, "nuevo record de " + record + " segundos", Toast.LENGTH_SHORT).show();
                                             } else {
+                                                mediaPlayer = MediaPlayer.create(MainActivityprevio.this, R.raw.nolohasconseguido);
                                                 Toast.makeText(MainActivityprevio.this, "LO SIENTO NO HAS SUPERADO EL RECORD", Toast.LENGTH_SHORT).show();
                                                 Toast.makeText(MainActivityprevio.this, "TU TIEMPO FUE DE " + t1Duraciont1Startt1Pause + " segundos", Toast.LENGTH_SHORT).show();
                                             }
                                         }
+                                        mediaPlayer.setLooping(false);
+                                        mediaPlayer.setVolume(100, 100);
+                                        mediaPlayer.start();
                                         // Asigno una clave para acceder poner la informacion que quiero
                                         //   CLAVE <-----"atrapameclave"
                                         editor.putFloat(CLAVE, (float) record);
