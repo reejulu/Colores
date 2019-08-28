@@ -2,9 +2,7 @@ package a.bb.colores;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -33,17 +31,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.google.gson.Gson;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
-
-import static a.bb.colores.VisualizacionRecord.PULSADO;
-import static a.bb.colores.VisualizacionRecord.PULSADOCLAVE;
 
 public class SplitViewCopia extends AppCompatActivity {
 
@@ -80,7 +73,7 @@ public class SplitViewCopia extends AppCompatActivity {
 
     // news
     boolean inicio = false;
-    ArrayList<Integer> ids = new ArrayList<Integer>();
+    ArrayList<Integer> ids = new ArrayList<>();
     private int num_veces;
     boolean bloqueclick;
     double recordjuego = 0;
@@ -106,7 +99,7 @@ public class SplitViewCopia extends AppCompatActivity {
     String Texto3previo;
     String Texto3;
     String Texto4;
-    ArrayList<Puntuacion> top10 = new ArrayList<Puntuacion>();
+    ArrayList<Puntuacion> top10 = new ArrayList<>();
     int id = 0;
     private CountDownTimer cronometro1;
     String timer;
@@ -164,8 +157,7 @@ public class SplitViewCopia extends AppCompatActivity {
             nivel = getIntent().getStringExtra("nivel");
             rotada = getIntent().getIntExtra("rotada",0);  // por defecto no hay rotacion de imagen
             original_photo_galery_uri =getIntent().getStringExtra("originaluri");
-            if (sinAvatarbolean == true) {
-                //TODO HAY QUE AÑADIR EL VALOR DEL NOMBRE DE LA IMAGEN i.e sinAvatar = "picture"
+            if (sinAvatarbolean) {
                // sinAvatar = "true"; // ya vine con el string de la imagen seleccionada
             }
             uri_destino = null;
@@ -226,12 +218,12 @@ public class SplitViewCopia extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                //TODO Whatever's meant to happen when it finishes
+
             }
 
             @Override
             public void onTick(long millisecondsLeft) {
-                if (empiezajuego == true) {
+                if (empiezajuego) {
 
                     segundos = segundos + 1;
                     if (segundos == 60) {
@@ -410,7 +402,7 @@ public void verresultados(){
 
 
     public void dividir(View view) {
-        if (jugarahora == false) {
+        if (!jugarahora) {
             jugarahoraItem1 = myMenu.findItem(R.id.jugarahora);
             resultadosItem1 = myMenu.findItem(R.id.resultados);
             resultadosItem1.setVisible(false);
@@ -441,7 +433,7 @@ public void verresultados(){
         //id = view.findViewById(R.id.bloque1);
         LinearLayout x = (LinearLayout) view;
         Log.i("MIAPP", "SplitViewCopia--marcarColor(view) -inicio es : " + inicio);
-        if (inicio == true) {
+        if (inicio) {
 
             // NIVEL DIFICIL o MUY DIFICIL
             int nivelnumero = Integer.parseInt(nivel);
@@ -449,7 +441,7 @@ public void verresultados(){
                 randNum = rand.nextInt(3) + 0; //MUY DIFICIL
             }else {
                 if (nivelnumero == 2){
-                    randNum = rand.nextInt(2) + 0; // DIFICIL
+                    randNum = rand.nextInt(2); // DIFICIL
                 }else {
                     randNum = 0;    // FACIL
                 }
@@ -490,7 +482,7 @@ public void verresultados(){
             }
             Log.i("MIAPP", "SplitViewCopia--marcarColor(view)-array momentaneo ids es: " + ids);
             Log.i("MIAPP", "SplitViewCopia--marcarColor(view)-el linear pulsado es " + x.getId());
-            if (bloqueclick == false) {
+            if (!bloqueclick) {
                 //view.setBackgroundColor(Color.red(100000));
                 view.setBackgroundColor(getResources().getColor(R.color.negro));
                 bloqueclick = true;
@@ -877,7 +869,7 @@ public void verresultados(){
         // baseDatosPuntuaciones.insertRecord(nuevojuego);
 
         //CONSULTO LA TABLA DE RECORD Y OBTENGO LA LISTA JUEGOS - RECORD
-        ArrayList<Puntuacion> listajuegos = new ArrayList<Puntuacion>();
+        ArrayList<Puntuacion> listajuegos = new ArrayList<>();
 
         listajuegos = (ArrayList<Puntuacion>) baseDatosPuntuaciones.listaconrecord(nivel);
 
@@ -925,7 +917,7 @@ public void verresultados(){
         //*************************************//
         // PARA ASIGNAR id - AL CERRAR LA APP Y VOLVERLA A CREAR EL id empezaria desde 0
         // y ese valor se volveria a repetir dando error .
-        // todo leer el ultimo id usado en la tabla
+        // hacer leer el ultimo id usado en la tabla
         // primero ver si la tabla ya esta definida y tal caso leer el ultimo usado.
         Puntuacion.setTop(top10);
         Puntuacion nuevojuego = new Puntuacion();
@@ -984,7 +976,7 @@ public void verresultados(){
         // baseDatosPuntuaciones.insertRecord(nuevojuego);
 
         //CONSULTO LA TABLA DE RECORD Y OBTENGO LA LISTA JUEGOS - RECORD
-        ArrayList<Puntuacion> listajuegos = new ArrayList<Puntuacion>();
+        ArrayList<Puntuacion> listajuegos = new ArrayList<>();
 
         listajuegos = (ArrayList<Puntuacion>) baseDatosPuntuaciones.listaconrecord(nivel);
         Log.i("MIAPP", "listajuegos es: " + listajuegos);
@@ -1072,7 +1064,7 @@ public void verresultados(){
                         String temporaldata = arrayDataLog.get(i);
                         String[] fields = temporaldata.split(",");
                         String timerecordantiguo = fields[1].toString();
-                        //todo
+                        // to do
                         //   con el tiempoactual(t1Durationt1Startt1Pause) y el tiempo anterior se verifica si hay
                         //         nuevo record
                         //        nuevo record = yes...entonces se marca variable record = 1
@@ -1157,17 +1149,5 @@ public void verresultados(){
         super.onStop();
         Log.i("MIAPP","onStop");
         Log.i("MIAPP", "SplitViewCopia-onStop-recordjuego :" + recordjuego);
-        // TODO guardar el record que jugadas
-        // primero defino una nueva
-        // RECORD = "RecordPartidaAnterior"
-        // CLAVE = "RecordPartidaAnteriorClave"
-//        SharedPreferences prefs = getSharedPreferences(RECORD, MODE_PRIVATE);
-        // Entro en modo Edicion
-//        SharedPreferences.Editor editor = prefs.edit();
-        // Asigno una clave para acceder poner la informacion que quiero
-        //   CLAVE <-----recordjuego
-//        editor.putFloat(CLAVE, (float) recordjuego);
-//        editor.commit();
-
     }
 }

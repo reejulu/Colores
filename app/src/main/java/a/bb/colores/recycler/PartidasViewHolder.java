@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -18,18 +17,10 @@ import android.widget.TextView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.AccessControlContext;
 
-import a.bb.colores.MainActivity;
 import a.bb.colores.R;
 import a.bb.colores.Utilidades;
-
-import static a.bb.colores.MainActivity.getCameraPhotoOrientation;
-import static a.bb.colores.MainActivity.getFileNameByUri;
-import static a.bb.colores.MainActivity.randomColor;
-import static java.security.AccessController.getContext;
 
 
 public class PartidasViewHolder extends RecyclerView.ViewHolder {

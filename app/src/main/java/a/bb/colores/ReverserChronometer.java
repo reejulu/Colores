@@ -18,7 +18,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 public class ReverserChronometer {
 

@@ -2,10 +2,10 @@ package a.bb.colores;
 
 
 import android.Manifest;
-import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -125,10 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 button.setVisibility(View.VISIBLE);
             }else {
                 sinAvatar = true;
-                // avatar_foto.setColorFilter(i);
-                //TODO HAY QUE RECUPER EL VALOR DE sinAvatarString y ponerlo en R.drawable.xxxx
                 traduciravatar();
-               // avatarJugador.setImageResource(R.drawable.dora1);
             }
         }
         //editText.setText(jugador);
@@ -341,6 +338,11 @@ public class MainActivity extends AppCompatActivity {
                         // en algunos cosos como la imagen fue rotada el drawable.picture aparece rotado.
                         // si asignamos setRotation con el ultimo valor almacenado en rotda se solventa el problema
                //         avatarJugador.setRotation(rotada);
+                        return true;
+                    case R.id.jugarAtrapame:
+                        Intent intent = new Intent(MainActivity.this, MainActivityprevio.class);
+                        startActivity(intent);
+                        finish();
                         return true;
                 }
                 return true;

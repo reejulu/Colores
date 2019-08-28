@@ -1,14 +1,11 @@
 package a.bb.colores;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
@@ -23,7 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Resultados extends AppCompatActivity {
-    ArrayList<String> arrayDataLog = new ArrayList<String>();
+    ArrayList<String> arrayDataLog = new ArrayList<>();
     ArrayList<String> arrayDataLogtemp = new ArrayList<>();
     String jugador;
     String juego;
@@ -67,17 +64,13 @@ public class Resultados extends AppCompatActivity {
     }
     private static Boolean getinfo(){
         boolean p = false;
-        if (sinAvatar=="false"){
-            p= false;
-        }else {
-            p = true;
-        }
+        p = sinAvatar != "false";
         return p;
     }
 
     public static String getSinAvatar() {
         String s = "false";
-        if (getinfo()==true){
+        if (getinfo()){
             s = "true";
         }
 
@@ -91,11 +84,11 @@ public class Resultados extends AppCompatActivity {
     public void filtartodaspartidas(String nivelabuscar) {
         // CONSULTA DB PARTIDA PARA OBTENER LA LISTA DE PARTIDAS ordenada por JUEGO
         //private ArrayList<Partida> datos;
-        datos = new ArrayList<Partida>();
+        datos = new ArrayList<>();
         Partida partida_aux =null;
 
         BaseDatosPuntuaciones baseDatosPuntuaciones = new BaseDatosPuntuaciones(this, "MiDB", null, 1);
-        ArrayList<Puntuacion> listajuegos = new ArrayList<Puntuacion>();
+        ArrayList<Puntuacion> listajuegos = new ArrayList<>();
         // todas las partidas
         // cuando juego es fijado xx - la busqueda se hara por orden de partidas jugadas
         juego = "xx";
@@ -250,9 +243,9 @@ public class Resultados extends AppCompatActivity {
         BaseDatosPuntuaciones baseDatosPuntuaciones = new BaseDatosPuntuaciones(this, "MiDB", null, 1);
 
 
-        ArrayList<Puntuacion> listajuegos = new ArrayList<Puntuacion>();
-        ArrayList<Puntuacion> listajuegos1 = new ArrayList<Puntuacion>();
-        ArrayList<Puntuacion> listajuegos2 = new ArrayList<Puntuacion>();
+        ArrayList<Puntuacion> listajuegos = new ArrayList<>();
+        ArrayList<Puntuacion> listajuegos1 = new ArrayList<>();
+        ArrayList<Puntuacion> listajuegos2 = new ArrayList<>();
         // solo partidas con record
         //listajuegos = (ArrayList<Puntuacion>) baseDatosPuntuaciones.listaconrecord();
         // todas las partidas
@@ -406,7 +399,7 @@ public class Resultados extends AppCompatActivity {
 public void presentarEnRecycler(String string,String nivelamostrar){
     Partida partida_aux = null;
     BaseDatosPuntuaciones baseDatosPuntuaciones = new BaseDatosPuntuaciones(this, "MiDB", null, 1);
-    ArrayList<Puntuacion> listajuegos = new ArrayList<Puntuacion>();
+    ArrayList<Puntuacion> listajuegos = new ArrayList<>();
     String juegoelegido = "no";
     if (!string.contains("xx")){
         listajuegos = (ArrayList<Puntuacion>) baseDatosPuntuaciones.listatodaspartidas(string, juegoelegido,nivel);

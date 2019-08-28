@@ -56,7 +56,7 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
 
     public List<Puntuacion> listaconrecord(String nivelabuscar) {
         //List<Puntuacion> juego = new ArrayList<Puntuacion>();
-        ArrayList<String> arrayListjuegosbuscados = new ArrayList<String>();
+        ArrayList<String> arrayListjuegosbuscados = new ArrayList<>();
         List<Puntuacion> lista_juegos = null;
         Puntuacion juego = null;
         int aux_id = -1;
@@ -94,7 +94,7 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
         int count1 = cursor.getCount();
         if (cursor != null && cursor.getCount()  > 0) {
             cursor.moveToLast();
-            lista_juegos = new ArrayList<Puntuacion>(cursor.getCount());
+            lista_juegos = new ArrayList<>(cursor.getCount());
             //juegotmp = cursor.getString(3); // guardo el juego en variable temporal
             for (int i = 0;i< count1;i++) {
                 //String p = cursor.getString(4);
@@ -145,7 +145,7 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
 
                     Log.i("MIAPP", "dentro -buscarjuego- juego es :" + juego);
                     //temporaljuego = juego1;
-                    if (recordEncontrado==false) {
+                    if (!recordEncontrado) {
                         // añado juego a la lista de encontrados si no lo estaba
                         arrayListjuegosbuscados.add(juego1);
                         lista_juegos.add(juego);
@@ -178,7 +178,7 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
 
     public List<Puntuacion> listaconrecordPorJugador(String jugadorelegido,String nivelabuscar) {
         //List<Puntuacion> juego = new ArrayList<Puntuacion>();
-        ArrayList<String> arrayListjuegosbuscados = new ArrayList<String>();
+        ArrayList<String> arrayListjuegosbuscados = new ArrayList<>();
         List<Puntuacion> lista_juegos = null;
         Puntuacion juego = null;
         int aux_id = -1;
@@ -205,7 +205,7 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
         int count1 = cursor.getCount();
         if (cursor != null && cursor.getCount()  > 0) {
             cursor.moveToLast();
-            lista_juegos = new ArrayList<Puntuacion>(cursor.getCount());
+            lista_juegos = new ArrayList<>(cursor.getCount());
             //juegotmp = cursor.getString(3); // guardo el juego en variable temporal
             for (int i = 0;i< count1;i++) {
                 //String p = cursor.getString(4);
@@ -260,7 +260,7 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
 
                         Log.i("MIAPP", "dentro -buscarjuego- juego es :" + juego);
                         //temporaljuego = juego1;
-                        if (recordEncontrado == false) {
+                        if (!recordEncontrado) {
                             // añado juego a la lista de encontrados si no lo estaba
                             arrayListjuegosbuscados.add(juego1);
                             lista_juegos.add(juego);
@@ -342,7 +342,7 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
         int count1 = cursor.getCount();
         if (cursor != null && cursor.getCount()  > 0) {
             cursor.moveToFirst();
-            lista_juegos = new ArrayList<Puntuacion>(cursor.getCount());
+            lista_juegos = new ArrayList<>(cursor.getCount());
             //juegotmp = cursor.getString(3); // guardo el juego en variable temporal
             for (int i = 0;i< count1;i++) {
                 aux_id = cursor.getInt(0); //la posicion primera, el id
@@ -671,7 +671,7 @@ public class BaseDatosPuntuaciones extends SQLiteOpenHelper {
         if( cursor != null && cursor.getCount() >0)
         {
             cursor.moveToFirst();
-            lista_coches = new ArrayList<Puntuacion>(cursor.getCount());
+            lista_coches = new ArrayList<>(cursor.getCount());
 
             do
             {

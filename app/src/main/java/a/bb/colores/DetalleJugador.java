@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -109,11 +108,11 @@ public class DetalleJugador extends AppCompatActivity {
     public void filtartodaspartidas( String juegoelegido,String nivelabuscar) {
         // CONSULTA DB PARTIDA PARA OBTENER LA LISTA DE PARTIDAS ordenada por JUEGO
         //private ArrayList<Partida> datos;
-        datos = new ArrayList<Partida>();
+        datos = new ArrayList<>();
         Partida partida_aux =null;
 
         BaseDatosPuntuaciones baseDatosPuntuaciones = new BaseDatosPuntuaciones(this, "MiDB", null, 1);
-        ArrayList<Puntuacion> listajuegos = new ArrayList<Puntuacion>();
+        ArrayList<Puntuacion> listajuegos = new ArrayList<>();
         // todas las partidas
         // cuando juego es fijado xx - la busqueda se hara por orden de partidas jugadas
         juego = "nombre";
@@ -234,7 +233,7 @@ public class DetalleJugador extends AppCompatActivity {
         BaseDatosPuntuaciones baseDatosPuntuaciones = new BaseDatosPuntuaciones(this, "MiDB", null, 1);
 
 
-        ArrayList<Puntuacion> listajuegos = new ArrayList<Puntuacion>();
+        ArrayList<Puntuacion> listajuegos = new ArrayList<>();
         // solo partidas con record
         //listajuegos = (ArrayList<Puntuacion>) baseDatosPuntuaciones.listaconrecord();
         // todas las partidas

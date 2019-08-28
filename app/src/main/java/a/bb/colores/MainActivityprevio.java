@@ -2,9 +2,9 @@ package a.bb.colores;
 
 
 import android.Manifest;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -17,13 +17,10 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,19 +29,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.PopupMenu;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -54,7 +47,6 @@ import static a.bb.colores.R.drawable.dora3;
 import static a.bb.colores.R.drawable.dora4;
 import static a.bb.colores.R.drawable.dora5;
 import static a.bb.colores.R.drawable.dora6;
-import static a.bb.colores.R.drawable.picture;
 
 
 public class MainActivityprevio extends AppCompatActivity {
@@ -78,7 +70,7 @@ public class MainActivityprevio extends AppCompatActivity {
     String original_photo_galery_uriString;
     int contador = 0;
     private static Random r = new Random();
-    ArrayList<Integer> lista = new ArrayList<Integer>();
+    ArrayList<Integer> lista = new ArrayList<>();
     int animUnit1;
     int x;
     CountDownTimer yourCountDownTimer;
@@ -88,6 +80,15 @@ public class MainActivityprevio extends AppCompatActivity {
     LinearLayout kk;
     String randomString;
     CountDownTimer avatartimer;
+    CountDownTimer cambiartimertexto;
+    Boolean atrapamejuego = false;
+    Boolean timerempezado = false;
+    long t1Start;
+    long t1Pause;
+    double t1Duraciont1Startt1Pause = 0;
+    double record = 0;
+    private static final String RECORD = "RecordPartidaAnterior";
+    private static final String CLAVE = "RecordPartidaAnteriorClave";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,11 +109,19 @@ public class MainActivityprevio extends AppCompatActivity {
         //editText.setText(jugador);
         // startColor = 0(cambiar color texto) y EndColor no se usa en el metodo changeTexColor
         changeTextColor(tv, 0, 0, 100000, 1000);
-        changeAvatar(avatarJugador,1,100000,1000);
+        changeAvatar(avatarJugador, 1, 100000, 1000);
         //animateIt();
         //startColor 1 - cambiar solo background color y de todas las cajitas
         //       changeTextColor(editText, 1, 0, 100000, 1000);
         ActivityCompat.requestPermissions(this, PERMISOS, CODIGO_PETICION_PERMISOS);
+
+        //RECUPERAR RECORD DE TIEMPO DE JUEGO ATRAPAME
+        SharedPreferences prefs = getSharedPreferences(RECORD,MODE_PRIVATE);
+        //*******************************//
+        //Datos de los ficheros "Record" //
+        //*******************************//
+        double pepe = prefs.getFloat(CLAVE,0);
+        record = pepe;
     }
 
 
@@ -127,15 +136,9 @@ public class MainActivityprevio extends AppCompatActivity {
     }
 
     public void changeAvatar(final ImageView avatarJugador1, final int startColor,
-                                final long animDuration, final long animUnit) {
+                             final long animDuration, final long animUnit) {
         avatarJugador = findViewById(R.id.foto);
         if (avatarJugador == null) return;
-        // final int startRed = Color.red(startColor);
-        // final int startBlue = Color.blue(startColor);
-        // final int startGreen = Color.green(startColor);
-        // final int endRed = Color.red(endColor);
-        // final int endBlue = Color.blue(endColor);
-        // final int endGreen = Color.green(endColor);
         avatartimer = new CountDownTimer(animDuration, animUnit) {
             //animDuration is the time in ms over which to run the animation
             //animUnit is the time unit in ms, update color after each animUnit
@@ -144,26 +147,30 @@ public class MainActivityprevio extends AppCompatActivity {
                 if (startColor == 1) {
                     // cambiar avatar automatico
                     cambiaravatar();
-                 //   avatarJugador.setImageResource(stringint);
+                    //   avatarJugador.setImageResource(stringint);
                 } else {
-;
+                    ;
                 }
             }
 
             @Override
             public void onFinish() {
-                    cambiaravatar();
+                cambiaravatar();
             }
         }.start();
     }
 
-    public void cambiaravatar(){
+    public void cambiaravatar() {
         String[] myArray = {"dora1", "dora2", "dora3", "dora4", "dora5", "dora6"};
         randomString = myArray[new Random().nextInt(myArray.length)];
-        traduciravatar(0);
+        if (!atrapamejuego) {
+            traduciravatar(0);
+        } else {
+            // de esta forma solo he cambiado el randomString
+        }
     }
 
-    public void traduciravatar(int i){
+    public void traduciravatar(int i) {
         if (i == 0) {
             switch (randomString) {
                 case "dora1":
@@ -187,7 +194,7 @@ public class MainActivityprevio extends AppCompatActivity {
                     avatarJugador.setImageResource(R.drawable.dora1);
                     break;
             }
-        }else {
+        } else {
             switch (randomString) {
                 case "dora1":
                     kk.setBackgroundResource(dora1);
@@ -213,41 +220,48 @@ public class MainActivityprevio extends AppCompatActivity {
         }
     }
 
-    public void changeTextColor(final TextView tv, final int startColor, int endColor,
+    public void changeTextColor(final TextView tv, final int startColor1, final int endColor,
                                 final long animDuration, final long animUnit) {
         if (tv == null) return;
-        // final int startRed = Color.red(startColor);
-        // final int startBlue = Color.blue(startColor);
-        // final int startGreen = Color.green(startColor);
-        // final int endRed = Color.red(endColor);
-        // final int endBlue = Color.blue(endColor);
-        // final int endGreen = Color.green(endColor);
-        new CountDownTimer(animDuration, animUnit) {
+
+        cambiartimertexto = new CountDownTimer(animDuration, animUnit) {
             //animDuration is the time in ms over which to run the animation
             //animUnit is the time unit in ms, update color after each animUnit
             @Override
             public void onTick(long l) {
-                //int red = (int) (endRed + (l * (startRed - endRed) / animDuration));
-                //int blue = (int) (endBlue + (l * (startBlue - endBlue) / animDuration));
-                //int green = (int) (endGreen + (l * (startGreen - endGreen) / animDuration));
-                //tv.setText("COLORES");
-                if (startColor == 1) {
-                    // cambiar color fondo
-                    tv.setBackgroundColor(randomColor());
-                    vista = findViewById(R.id.root2);
-                    SplitViewCopia splitViewCopia = new SplitViewCopia();
-                    splitViewCopia.recorrerLayoutsycolorear(vista);
-                } else {
+                Log.i("traceillo1", "startColor1 vale : " + startColor1);
+                if (startColor1 == 2) {
+                    tv.setText("ATRAPAME Y COMPLETA LA PANTALLA");
                     if (contador == 0) {
-                        tv.setText("SELECCIONA Y");
+                        tv.setText("ATRAPAME Y");
+                        tv.setTextColor(Color.BLACK);
+                        tv.setTextSize(1, 35);
                         contador = 1;
                     } else {
-                        tv.setText("ENCUENTRAME");
-                        tv.setTextSize(1, 35);
+                        tv.setText("COMPLETA PANTALLA");
+                        tv.setTextColor(Color.BLACK);
+                        tv.setTextSize(1, 25);
                         contador = 0;
                     }
+                } else {
+                    if (startColor1 == 1) {
+                        // cambiar color fondo
+                        tv.setBackgroundColor(randomColor());
+                        vista = findViewById(R.id.root2);
+                        SplitViewCopia splitViewCopia = new SplitViewCopia();
+                        splitViewCopia.recorrerLayoutsycolorear(vista);
+                    } else {
+                        if (contador == 0) {
+                            tv.setText("SELECCIONA Y");
+                            contador = 1;
+                        } else {
+                            tv.setText("ENCUENTRAME");
+                            tv.setTextSize(1, 35);
+                            contador = 0;
+                        }
 
-                    tv.setTextColor(randomColor());
+                        tv.setTextColor(randomColor());
+                    }
                 }
             }
 
@@ -270,18 +284,23 @@ public class MainActivityprevio extends AppCompatActivity {
             public void onTick(long l) {
                 //tv.setText("COLORES");
                 if (startColor == 1) {
-                    //            lista.clear();
-
-                    recorrerLayoutsycolorear(vista);
-                    Log.i("traceillo", "lista size es : " + lista.size());
-                    //            Log.i("traceillo", "lista tiene : " + lista.toString());
+                    //RECORRE lista-array(son todos los cajitas) y las pone de color variado
+                    // vista realmente es el array - llamamos al metodo con vista pero no se usa
+                    // en el onClick queda abierta la posibilidad de jugarAtrapame y jugar a cajitas
+                    // -Cuando jugar Atrapame : cada vez que se marque una cajita el dibujito se quedara fijo
+                    // -Cuando jugar a cajitas: al pinchar por primera vez un dibujito se saltara a jugar.
+                    recorrerLayoutsycolorear1(vista);
+                    // añado una cajita aleatoria  con una imagen (deberia ser aleatoria-pendiente)
                     Random r = new Random();
-                    x = lista.get(r.nextInt(lista.size()));
-                    kk = findViewById(x);
-                    kk.setTag("si");
+                    Log.i("traceillo2", "lista size es : " + lista.size());
+                    if (lista.size() > 0) {
+                        x = lista.get(r.nextInt(lista.size()));
+                        kk = findViewById(x);
+                        kk.setTag("si");
+                    }
                     // COMPROBAMOS SI HAY IMAGEN O AVATAR
                     //   kk.setBackgroundResource(picture);
-                    if (sinAvatar == false) {
+                    if (!sinAvatar) {
                         String nombreArchivo = "COLORES_PIC";
                         String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath() + "/" + nombreArchivo + ".JPEG";
                         Bitmap bitmap = BitmapFactory.decodeFile(root);
@@ -306,16 +325,24 @@ public class MainActivityprevio extends AppCompatActivity {
                     Log.i("traceillo", "el id seleccionado es :" + x);
                     Log.i("traceillo", "el id seleccionado es kk.getId :" + kk.getId());
 
-                } else {
-                    if (contador == 0) {
-                        tv.setText("SELECCIONA Y");
-                        contador = 1;
-                    } else {
-                        tv.setText("ENCUENTRAME");
-                        tv.setTextSize(1, 35);
-                        contador = 0;
+                }
+                if (startColor == 2) {
+                    //RECORRE lista-array(son todos los cajitas) y las pone de color variado
+                    // vista realmente es el array - llamamos al metodo con vista pero no se usa
+                    // en el onClick queda abierta la posibilidad de jugarAtrapame y jugar a cajitas
+                    // -Cuando jugar Atrapame : cada vez que se marque una cajita el dibujito se quedara fijo
+                    // -Cuando jugar a cajitas: al pinchar por primera vez un dibujito se saltara a jugar.
+                    recorrerLayoutsycolorear1(vista);
+                    // añado una cajita aleatoria  con una imagen (deberia ser aleatoria-pendiente)
+                    Random r = new Random();
+                    Log.i("traceillo2", "lista size es : " + lista.size());
+                    if (lista.size() > 0) {
+                        x = lista.get(r.nextInt(lista.size()));
+                        kk = findViewById(x);
+                        kk.setTag("si");
                     }
-                    tv.setTextColor(randomColor());
+                    cambiaravatar();
+                    traduciravatar(1);
                 }
             }
 
@@ -331,14 +358,40 @@ public class MainActivityprevio extends AppCompatActivity {
         }.start();
     }
 
-    public void recorrerLayoutsycolorear(View vista) {
+    public void recorrerLayoutslistacolorear(View vista) {
+        if (vista instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) vista;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                final View vistahija = viewGroup.getChildAt(i);
+                vistahija.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        String temporaltag1 = v.getTag().toString();
+                        Log.i("traceillo2", "click en atrapada");
+                        if (temporaltag1.contains("no")) {
+                            // cambio de color
+                            Log.i("traceillo2", "click en tag no");
+                            vistahija.setBackgroundColor(randomColor());
+                        } else {
+                            Log.i("traceillo2", "click en tag si");
+                            int tempid = v.getId();
+                            //                 lista.remove(tempid);
+                            // entonces cambio de color sino NO
+                        }
+                    }
+                });
+                recorrerLayoutslistacolorear(vistahija);
+            }
+        }
+    }
+
+    public void recorrerLayoutsycolorear(final View vista) {
         if (vista instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) vista;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
                 final View vistahija = viewGroup.getChildAt(i);
                 // ALMACENO TODOS LOS HIJOS EN UN ARRAY-lista
                 // solo almaceno una vez la lista en caso listahecha = false
-                if (listahecha == false) {
+                if (!listahecha) {
                     if (vistahija.getId() != -1) {
                         lista.add(vistahija.getId());
                     }
@@ -349,35 +402,60 @@ public class MainActivityprevio extends AppCompatActivity {
                 vistahija.setClickable(true);
                 vistahija.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        String tag = v.getTag().toString();
-                        Log.i("traceillo", "tag pinchado es : " + tag);
-                        Log.i("traceillo", "tag pinchado es (id): " + v.getId());
-                        Log.i("traceillo", "el id actual x es :" + x);
-                        if (tag.contains("si")) {
-                            yourCountDownTimer.cancel();
-                            Log.i("traceillo", "he conseguido pillarte");
-                            Log.i("traceillo", "el id pillado es v.getId :" + v.getId());
-                            editText = findViewById(R.id.jugadornombre1);
-                            if (editText.getText().toString().isEmpty()) {
-                                editText.setText(jugador);
-                            } else {
-                                jugador = editText.getText().toString();
+                        if (!atrapamejuego) {
+                            String tag = v.getTag().toString();
+                            Log.i("traceillo", "tag pinchado es : " + tag);
+                            Log.i("traceillo", "tag pinchado es (id): " + v.getId());
+                            Log.i("traceillo", "el id actual x es :" + x);
+                            if (tag.contains("si")) {
+                                yourCountDownTimer.cancel();
+                                Log.i("traceillo", "he conseguido pillarte");
+                                Log.i("traceillo", "el id pillado es v.getId :" + v.getId());
+                                editText = findViewById(R.id.jugadornombre1);
+                                if (editText.getText().toString().isEmpty()) {
+                                    editText.setText(jugador);
+                                } else {
+                                    jugador = editText.getText().toString();
+                                }
+                                Intent intent = new Intent(MainActivityprevio.this, MainActivity.class);
+                                intent.putExtra("rotadevuelta", rotada);
+                                int desdeMainActivityprevio = 1;
+                                intent.putExtra("desdeprevio", desdeMainActivityprevio);
+                                root = Environment.getExternalStorageDirectory().toString() + "/Pictures/COLORES_PIC.JPEG";
+                                intent.putExtra("fotoinicio", root);
+                                sinAvatarString = "false";
+                                if (sinAvatar) {
+                                    sinAvatarString = randomString;// aqui esta el seleccionado
+                                    //           sinAvatarString = "picture";
+                                }
+                                intent.putExtra("avatardesdeResultados", sinAvatarString);
+                                intent.putExtra("nombre", jugador);
+                                startActivity(intent);
+                                finish();
                             }
-                            Intent intent = new Intent(MainActivityprevio.this, MainActivity.class);
-                            intent.putExtra("rotadevuelta", rotada);
-                            int desdeMainActivityprevio = 1;
-                            intent.putExtra("desdeprevio", desdeMainActivityprevio);
-                            root = Environment.getExternalStorageDirectory().toString() + "/Pictures/COLORES_PIC.JPEG";
-                            intent.putExtra("fotoinicio", root);
-                            sinAvatarString = "false";
-                            if (sinAvatar) {
-                                  sinAvatarString = randomString;// aqui esta el seleccionado
-                     //           sinAvatarString = "picture";
+                        } else {
+                            for (int x = 0; x < lista.size(); x++) {
+                                int idtemporal = lista.get(x);
+                                //       ViewGroup viewGroup = (ViewGroup) v;
+                                //               Log.i("traceillo2","viewGroup.getChildCount es : "+viewGroup.getChildCount());
+                                //               for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                                //                   final View vistahija = viewGroup.getChildAt(i);
+                                //                    Log.i("traceillo2","id-lista es: "+idtemporal);
+                                //                    Log.i("traceillo2","id-vistahija es : "+viewGroup.getId());
+                                if (v.getId() == idtemporal) {
+                                    Log.i("traceillo2", "id encontrado " + idtemporal);
+                                    v.setClickable(false);
+                                    lista.remove(x);
+                                }
+                                //               }
+
+                                //     vistahija.setClickable(false);
                             }
-                            intent.putExtra("avatardesdeResultados", sinAvatarString);
-                            intent.putExtra("nombre", jugador);
-                            startActivity(intent);
-                            finish();
+                            // en caso de atrapame juego ejecuta esta parte
+                            View vista1;
+                            vista1 = findViewById(R.id.root2);
+                            Log.i("traceillo2", "pulsado en juego atrapa");
+                            recorrerLayoutslistacolorear(vista1);
                         }
                     }
                 });
@@ -386,8 +464,115 @@ public class MainActivityprevio extends AppCompatActivity {
         }
     }
 
+    public void recorrerLayoutsycolorear1(View vista) {
+        for (int i = 0; i < lista.size(); i++) {
+            int tmpid = lista.get(i);
+            vista = findViewById(tmpid);
+            vista.setId(tmpid);
+            vista.setClickable(true);
+            vista.setBackgroundColor(randomColor());
+            vista.setTag("no");
+
+            vista.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if (atrapamejuego) {
+                        if (!timerempezado) {
+                            //INICION TIMER DEL JUEGO -ATRAPAME
+                            t1Start = System.currentTimeMillis();
+                            t1Duraciont1Startt1Pause = 0;
+                            timerempezado = true;
+                            Toast.makeText(MainActivityprevio.this, "Empieza el tiempo", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivityprevio.this, "Record actual " + record + " segundos", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        for (int x = 0; x < lista.size(); x++) {
+                            int idtemporal = lista.get(x);
+                            if (v.getTag() == "si") {
+                                if (v.getId() == idtemporal) {
+                                    Log.i("traceillo2", "id encontrado " + idtemporal);
+                                    v.setClickable(false);
+                                    // v.setTag("no");
+                                    lista.remove(x);
+                                    if (lista.size() == 0) {
+                                        Log.i("traceillo3", "hemos terminado");
+                                        t1Pause = System.currentTimeMillis();
+                                        t1Duraciont1Startt1Pause =((t1Pause - t1Start) / 1000d);  // en segundos
+
+                                        // GUARDAR RECORD DE ATRAPAME EN SHAREPREFERENCE
+                                        // JUEGO = "atrapame"
+                                        SharedPreferences prefs = getSharedPreferences(RECORD,MODE_PRIVATE);
+                                        // Entro en modo Edicion
+                                        SharedPreferences.Editor editor = prefs.edit();
+
+                                        int t1 = (int) t1Duraciont1Startt1Pause;
+                                        int r = (int) record;
+                                        if (r==0){
+                                            record = t1Duraciont1Startt1Pause;
+                                            Toast.makeText(MainActivityprevio.this, "nuevo record de " + record + " segundos", Toast.LENGTH_SHORT).show();
+                                        }else {
+                                            if (t1 < r) {
+                                                record = t1Duraciont1Startt1Pause;
+                                                Toast.makeText(MainActivityprevio.this, "nuevo record de " + record + " segundos", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(MainActivityprevio.this, "LO SIENTO NO HAS SUPERADO EL RECORD", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(MainActivityprevio.this, "TU TIEMPO FUE DE " + t1Duraciont1Startt1Pause + " segundos", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                        // Asigno una clave para acceder poner la informacion que quiero
+                                        //   CLAVE <-----"atrapameclave"
+                                        editor.putFloat(CLAVE, (float) record);
+                                        editor.commit();
+                                        Log.i("traceillo3", "El tiempo tardado es de : " + t1Duraciont1Startt1Pause + " segundos");
+                                        Intent intent = new Intent(MainActivityprevio.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        // caso inial para empezar juego cajitas
+                        for (int x = 0; x < lista.size(); x++) {
+                            int idtemporal = lista.get(x);
+                            if (v.getTag() == "si") {
+                                if (v.getId() == idtemporal) {
+                                    yourCountDownTimer.cancel();
+                                    editText = findViewById(R.id.jugadornombre1);
+                                    if (editText.getText().toString().isEmpty()) {
+                                        editText.setText(jugador);
+                                    } else {
+                                        jugador = editText.getText().toString();
+                                    }
+                                    Intent intent = new Intent(MainActivityprevio.this, MainActivity.class);
+                                    intent.putExtra("rotadevuelta", rotada);
+                                    int desdeMainActivityprevio = 1;
+                                    intent.putExtra("desdeprevio", desdeMainActivityprevio);
+                                    root = Environment.getExternalStorageDirectory().toString() + "/Pictures/COLORES_PIC.JPEG";
+                                    intent.putExtra("fotoinicio", root);
+                                    sinAvatarString = "false";
+                                    if (sinAvatar) {
+                                        sinAvatarString = randomString;// aqui esta el seleccionado
+                                    }
+                                    intent.putExtra("avatardesdeResultados", sinAvatarString);
+                                    intent.putExtra("nombre", jugador);
+                                    startActivity(intent);
+                                    finish();
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+            });
+        }
+    }
+
 
     public void Proseguir(View view) {
+        //  borra pantalla y recorre vista root2 para colorear
         avatarJugador.setVisibility(View.INVISIBLE);
         TextView tv = (TextView) findViewById(R.id.titulo);
         tv.setVisibility(View.INVISIBLE);
@@ -397,11 +582,31 @@ public class MainActivityprevio extends AppCompatActivity {
         editText.setVisibility(View.INVISIBLE);
         vista = findViewById(R.id.root2);
         animUnit1 = 1100;
-        if (sinAvatar == true) {
+
+        if (sinAvatar) {
             animUnit1 = 500;
+            if (atrapamejuego) {
+                animUnit1 = 1500;
+            }
+            Log.i("traceillo", "valor j es :" + animUnit1);
+            // recorre la vista -lista y con startColor = 2 hace:
+            //RECORRE lista-array(son todos los cajitas) y las pone de color variado
+            // (vista) realmente es el array - llamamos al metodo con vista pero no se usa
+            // en el onClick queda abierta la posibilidad de jugarAtrapame y jugar a cajitas
+            // -Cuando jugar Atrapame : cada vez que se marque una cajita el dibujito se quedara fijo
+            // -Cuando jugar a cajitas: al pinchar por primera vez un dibujito se saltara a jugar.
+            //         recorrerLayoutsycolorear1(vista);
+            // añado una cajita aleatoria  con una imagen (deberia ser aleatoria-pendiente)
+            changeTextColor1(vista, 2, 0, 500000, animUnit1);
+        } else {
+            // recorre la vista -lista y con startColor = 1 hace:
+            //RECORRE lista-array(son todos los cajitas) y las pone de color variado
+            // (vista) realmente es el array - llamamos al metodo con vista pero no se usa
+            // en el onClick : al pinchar por primera vez un dibujito se saltara a jugar.
+            //         recorrerLayoutsycolorear1(vista);
+            changeTextColor1(vista, 1, 0, 100000, animUnit1);
         }
-        Log.i("traceillo", "valor j es :" + animUnit1);
-        changeTextColor1(vista, 1, 0, 10000, animUnit1);
+
     }
 
 
@@ -421,7 +626,7 @@ public class MainActivityprevio extends AppCompatActivity {
         }
     }
 
-    public void personalizarFoto(View view) {
+    public void personalizarFoto(final View view) {
         avatartimer.cancel();
         PopupMenu popup = new PopupMenu(this, view);
         //Inflating the Popup using xml file
@@ -447,7 +652,25 @@ public class MainActivityprevio extends AppCompatActivity {
                         // esto hace falta si anteriormente se opto por la opcion tomar foto o desde album
                         // en algunos cosos como la imagen fue rotada el drawable.picture aparece rotado.
                         // si asignamos setRotation con el ultimo valor almacenado en rotda se solventa el problema
-           //             avatarJugador.setRotation(rotada);
+                        //             avatarJugador.setRotation(rotada);
+                        return true;
+                    case R.id.jugarAtrapame:
+                        //quitar timer en cambiar texto de titulo
+                        cambiartimertexto.cancel();
+                        contador = 0;
+                        TextView tv = (TextView) findViewById(R.id.titulo);
+                        // cambiar texto y fijar timer .startColor1 = 2 y:
+                        //  cuando contador = 0 -"ATRAPAME Y"
+                        //  cuando contador = 0 -"COMPLETA PANTALLA"
+                        changeTextColor(tv, 2, 0, 100000, 1000);
+                        //  mostrar toda la pantalla con las cajitas de colores y cambiando cada timer una
+                        //  casilla por un dibujo
+                        //            changeAvatar(avatarJugador,1,100000,1000);
+                        sinAvatar = true;
+                        atrapamejuego = true;
+                        vista = findViewById(R.id.root2);
+                        // prepara pantalla borrando titulo e imagen
+                        Proseguir(vista);
                         return true;
                 }
                 return true;

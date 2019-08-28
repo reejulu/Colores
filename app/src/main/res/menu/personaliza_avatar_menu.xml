@@ -5,6 +5,8 @@
         android:id="@+id/foto_camara"/>
     <item android:title="Galería"
         android:id="@+id/foto_galeria"/>
-    <item android:title="Continuar Sin Avatar"
+    <item android:title="Con el Avatar"
         android:id="@+id/continuar"/>
+    <item android:title="JUGAR AHORA-ATRAPAME"
+        android:id="@+id/jugarAtrapame"/>
 </menu>

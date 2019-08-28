@@ -52,7 +52,7 @@ public class Puntuacion extends ArrayList<Puntuacion> implements Comparable<Punt
         this.sinAvatar = sinAvatar;
     }
 
-    private static ArrayList<Puntuacion> top = new ArrayList<Puntuacion>();
+    private static ArrayList<Puntuacion> top = new ArrayList<>();
 
     public int getId() {
         return id;
